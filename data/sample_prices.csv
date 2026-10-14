@@ -1,0 +1,151 @@
+crop,market,date,min_price,max_price,modal_price,arrival_quantity
+Tomato,Nashik APMC,2026-08-20,18,24,21,110
+Tomato,Nashik APMC,2026-08-21,19,25,22,105
+Tomato,Nashik APMC,2026-08-22,20,26,23,98
+Tomato,Nashik APMC,2026-08-23,20,27,23,102
+Tomato,Nashik APMC,2026-08-24,21,28,25,95
+Tomato,Nashik APMC,2026-08-25,22,29,26,90
+Tomato,Pune Market A,2026-08-20,17,23,20,140
+Tomato,Pune Market A,2026-08-21,18,23,20,138
+Tomato,Pune Market A,2026-08-22,18,24,21,130
+Tomato,Pune Market A,2026-08-23,19,24,21,125
+Tomato,Pune Market A,2026-08-24,19,25,22,120
+Tomato,Pune Market A,2026-08-25,20,25,22,118
+Tomato,Aurangabad Market B,2026-08-20,22,30,26,70
+Tomato,Aurangabad Market B,2026-08-21,23,31,27,68
+Tomato,Aurangabad Market B,2026-08-22,24,32,28,65
+Tomato,Aurangabad Market B,2026-08-23,24,33,28,60
+Tomato,Aurangabad Market B,2026-08-24,25,34,29,58
+Tomato,Aurangabad Market B,2026-08-25,26,35,30,55
+Tomato,Nagpur Market C,2026-08-20,20,27,24,85
+Tomato,Nagpur Market C,2026-08-21,21,28,24,88
+Tomato,Nagpur Market C,2026-08-22,22,29,25,80
+Tomato,Nagpur Market C,2026-08-23,23,30,26,78
+Tomato,Nagpur Market C,2026-08-24,24,31,27,75
+Tomato,Nagpur Market C,2026-08-25,25,32,28,72
+Tomato,Solapur Market D,2026-08-20,16,22,19,150
+Tomato,Solapur Market D,2026-08-21,16,22,19,148
+Tomato,Solapur Market D,2026-08-22,17,23,20,145
+Tomato,Solapur Market D,2026-08-23,17,23,20,142
+Tomato,Solapur Market D,2026-08-24,18,24,21,138
+Tomato,Solapur Market D,2026-08-25,18,24,21,135
+Onion,Nashik APMC,2026-08-20,20,26,23,350
+Onion,Nashik APMC,2026-08-21,21,26,24,340
+Onion,Nashik APMC,2026-08-22,21,27,24,335
+Onion,Nashik APMC,2026-08-23,22,28,25,325
+Onion,Nashik APMC,2026-08-24,23,29,26,310
+Onion,Nashik APMC,2026-08-25,24,30,27,300
+Onion,Pune Market A,2026-08-20,22,28,25,240
+Onion,Pune Market A,2026-08-21,23,29,26,235
+Onion,Pune Market A,2026-08-22,23,29,26,230
+Onion,Pune Market A,2026-08-23,24,30,27,225
+Onion,Pune Market A,2026-08-24,25,31,28,220
+Onion,Pune Market A,2026-08-25,25,32,28,215
+Onion,Aurangabad Market B,2026-08-20,24,31,27,150
+Onion,Aurangabad Market B,2026-08-21,25,32,28,145
+Onion,Aurangabad Market B,2026-08-22,26,33,29,140
+Onion,Aurangabad Market B,2026-08-23,26,34,30,135
+Onion,Aurangabad Market B,2026-08-24,27,35,31,130
+Onion,Aurangabad Market B,2026-08-25,28,36,32,125
+Onion,Nagpur Market C,2026-08-20,26,33,30,115
+Onion,Nagpur Market C,2026-08-21,27,34,31,110
+Onion,Nagpur Market C,2026-08-22,28,35,32,105
+Onion,Nagpur Market C,2026-08-23,29,36,33,100
+Onion,Nagpur Market C,2026-08-24,30,37,34,95
+Onion,Nagpur Market C,2026-08-25,31,38,35,90
+Onion,Solapur Market D,2026-08-20,21,27,24,220
+Onion,Solapur Market D,2026-08-21,21,27,24,215
+Onion,Solapur Market D,2026-08-22,22,28,25,210
+Onion,Solapur Market D,2026-08-23,23,29,26,200
+Onion,Solapur Market D,2026-08-24,23,29,26,195
+Onion,Solapur Market D,2026-08-25,24,30,27,190
+Potato,Nashik APMC,2026-08-20,16,21,18,160
+Potato,Nashik APMC,2026-08-21,16,22,19,155
+Potato,Nashik APMC,2026-08-22,17,22,19,150
+Potato,Nashik APMC,2026-08-23,17,23,20,145
+Potato,Nashik APMC,2026-08-24,18,23,20,140
+Potato,Nashik APMC,2026-08-25,18,24,21,135
+Potato,Pune Market A,2026-08-20,18,24,21,210
+Potato,Pune Market A,2026-08-21,18,24,21,205
+Potato,Pune Market A,2026-08-22,19,25,22,195
+Potato,Pune Market A,2026-08-23,20,26,23,190
+Potato,Pune Market A,2026-08-24,20,26,23,185
+Potato,Pune Market A,2026-08-25,21,27,24,180
+Potato,Aurangabad Market B,2026-08-20,17,23,20,130
+Potato,Aurangabad Market B,2026-08-21,17,23,20,125
+Potato,Aurangabad Market B,2026-08-22,18,24,21,120
+Potato,Aurangabad Market B,2026-08-23,18,25,21,118
+Potato,Aurangabad Market B,2026-08-24,19,25,22,115
+Potato,Aurangabad Market B,2026-08-25,20,26,23,110
+Potato,Nagpur Market C,2026-08-20,20,26,23,140
+Potato,Nagpur Market C,2026-08-21,21,27,24,135
+Potato,Nagpur Market C,2026-08-22,21,27,24,130
+Potato,Nagpur Market C,2026-08-23,22,28,25,125
+Potato,Nagpur Market C,2026-08-24,23,29,26,120
+Potato,Nagpur Market C,2026-08-25,24,30,27,115
+Potato,Solapur Market D,2026-08-20,15,21,18,150
+Potato,Solapur Market D,2026-08-21,16,21,18,145
+Potato,Solapur Market D,2026-08-22,16,22,19,140
+Potato,Solapur Market D,2026-08-23,17,22,19,138
+Potato,Solapur Market D,2026-08-24,17,23,20,135
+Potato,Solapur Market D,2026-08-25,18,24,21,130
+Soybean,Nashik APMC,2026-08-20,40,46,43,130
+Soybean,Nashik APMC,2026-08-21,41,47,44,125
+Soybean,Nashik APMC,2026-08-22,41,47,44,120
+Soybean,Nashik APMC,2026-08-23,42,48,45,118
+Soybean,Nashik APMC,2026-08-24,42,49,45,115
+Soybean,Nashik APMC,2026-08-25,43,50,46,110
+Soybean,Pune Market A,2026-08-20,42,48,45,160
+Soybean,Pune Market A,2026-08-21,43,49,46,155
+Soybean,Pune Market A,2026-08-22,43,50,46,150
+Soybean,Pune Market A,2026-08-23,44,50,47,145
+Soybean,Pune Market A,2026-08-24,45,51,48,140
+Soybean,Pune Market A,2026-08-25,45,52,48,135
+Soybean,Aurangabad Market B,2026-08-20,44,51,47,200
+Soybean,Aurangabad Market B,2026-08-21,45,52,48,190
+Soybean,Aurangabad Market B,2026-08-22,46,53,49,185
+Soybean,Aurangabad Market B,2026-08-23,47,54,50,180
+Soybean,Aurangabad Market B,2026-08-24,47,55,51,175
+Soybean,Aurangabad Market B,2026-08-25,48,56,52,170
+Soybean,Nagpur Market C,2026-08-20,46,53,49,320
+Soybean,Nagpur Market C,2026-08-21,47,54,50,310
+Soybean,Nagpur Market C,2026-08-22,48,55,51,300
+Soybean,Nagpur Market C,2026-08-23,49,56,52,295
+Soybean,Nagpur Market C,2026-08-24,50,57,53,290
+Soybean,Nagpur Market C,2026-08-25,51,58,54,285
+Soybean,Solapur Market D,2026-08-20,41,47,44,140
+Soybean,Solapur Market D,2026-08-21,42,48,45,135
+Soybean,Solapur Market D,2026-08-22,42,48,45,130
+Soybean,Solapur Market D,2026-08-23,43,49,46,128
+Soybean,Solapur Market D,2026-08-24,44,50,47,125
+Soybean,Solapur Market D,2026-08-25,44,51,47,120
+Wheat,Nashik APMC,2026-08-20,23,28,25,180
+Wheat,Nashik APMC,2026-08-21,24,29,26,175
+Wheat,Nashik APMC,2026-08-22,24,29,26,170
+Wheat,Nashik APMC,2026-08-23,25,30,27,165
+Wheat,Nashik APMC,2026-08-24,25,31,28,160
+Wheat,Nashik APMC,2026-08-25,26,31,28,155
+Wheat,Pune Market A,2026-08-20,25,31,28,250
+Wheat,Pune Market A,2026-08-21,26,32,29,245
+Wheat,Pune Market A,2026-08-22,26,32,29,240
+Wheat,Pune Market A,2026-08-23,27,33,30,235
+Wheat,Pune Market A,2026-08-24,28,34,31,230
+Wheat,Pune Market A,2026-08-25,28,34,31,225
+Wheat,Aurangabad Market B,2026-08-20,24,30,27,190
+Wheat,Aurangabad Market B,2026-08-21,25,31,28,185
+Wheat,Aurangabad Market B,2026-08-22,25,31,28,180
+Wheat,Aurangabad Market B,2026-08-23,26,32,29,175
+Wheat,Aurangabad Market B,2026-08-24,27,33,30,170
+Wheat,Aurangabad Market B,2026-08-25,27,33,30,165
+Wheat,Nagpur Market C,2026-08-20,26,33,29,220
+Wheat,Nagpur Market C,2026-08-21,27,34,30,215
+Wheat,Nagpur Market C,2026-08-22,27,34,30,210
+Wheat,Nagpur Market C,2026-08-23,28,35,31,205
+Wheat,Nagpur Market C,2026-08-24,29,36,32,200
+Wheat,Nagpur Market C,2026-08-25,29,36,32,195
+Wheat,Solapur Market D,2026-08-20,24,29,26,170
+Wheat,Solapur Market D,2026-08-21,24,30,27,165
+Wheat,Solapur Market D,2026-08-22,25,30,27,160
+Wheat,Solapur Market D,2026-08-23,25,31,28,155
+Wheat,Solapur Market D,2026-08-24,26,31,28,150
+Wheat,Solapur Market D,2026-08-25,26,32,29,145

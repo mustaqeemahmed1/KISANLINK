@@ -1,0 +1,3142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>KisanLink AI — Smart Agricultural Market Linkage & Net Return Platform</title>
+  <meta name="description"
+    content="KisanLink AI connects farmers with the market and buyers providing the highest expected net return." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    /* ─────────────────────────────────────────────
+       Design tokens — High-Contrast Dark Green Theme
+    ───────────────────────────────────────────── */
+    :root {
+      --bg: #07130b;
+      --surface: #0e2216;
+      --surface-2: #162f1f;
+      --surface-3: #1f422c;
+      --border: #285235;
+      --border-bright: #3c774f;
+      --green-300: #86efac;
+      --green-400: #4ade80;
+      --green-500: #22c55e;
+      --green-600: #16a34a;
+      --amber: #fbbf24;
+      --amber-light: #fef08a;
+      --red: #f87171;
+      --blue: #60a5fa;
+      --purple: #c084fc;
+      --text: #f0fdf4;
+      --text-dim: #cbd5e1;
+      --muted: #8aa896;
+      --rank-1: #fbbf24;
+      --rank-2: #e2e8f0;
+      --rank-3: #fb923c;
+      --radius: 12px;
+      --shadow: 0 10px 35px rgba(0, 0, 0, .6);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* ─── Header ─── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 14px 32px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--green-500), var(--green-600));
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    }
+
+    .logo-text {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -.4px;
+    }
+
+    .logo-text span {
+      color: var(--green-400);
+    }
+
+    /* ── Top Navigation Tabs (Crisp & Responsive) ── */
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      background: rgba(14, 34, 22, 0.95);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .nav-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-dim);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      position: relative;
+      z-index: 10;
+      user-select: none;
+    }
+
+    .nav-tab-btn:hover {
+      color: #fff;
+      background: rgba(31, 66, 44, 0.8);
+      transform: translateY(-1px);
+    }
+
+    .nav-tab-btn.active {
+      background: linear-gradient(180deg, #16a34a 0%, #15803d 100%);
+      color: #fff;
+      border-color: rgba(74, 222, 128, 0.5);
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+    }
+
+    .nav-tab-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* ── Header Action Pill & Alerts Button ── */
+    .farmer-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(180deg, rgba(34, 197, 94, 0.14) 0%, rgba(14, 34, 22, 0.8) 100%);
+      border: 1.5px solid var(--border-bright);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: .85rem;
+      font-weight: 600;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .farmer-pill-btn {
+      background: linear-gradient(180deg, #1f422c 0%, #142e1d 100%);
+      border: 1px solid var(--border-bright);
+      color: var(--green-300);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: .75rem;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 3px 0 #0a1b10, 0 5px 10px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .farmer-pill-btn:hover {
+      background: linear-gradient(180deg, #285539 0%, #183824 100%);
+      color: #fff;
+      border-color: var(--green-400);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 0 #0a1b10, 0 8px 16px rgba(34, 197, 94, 0.3);
+    }
+
+    .farmer-pill-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #0a1b10, 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .avatar-preset-btn {
+      background: linear-gradient(180deg, #1f422c 0%, #142e1d 100%);
+      border: 1px solid var(--border-bright);
+      color: #fff;
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: .8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 3px 0 #0a1b10, 0 5px 10px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .avatar-preset-btn:hover {
+      border-color: var(--green-400);
+      background: linear-gradient(180deg, #285539 0%, #183824 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 0 #0a1b10, 0 8px 16px rgba(34, 197, 94, 0.3);
+    }
+
+    .avatar-preset-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #0a1b10;
+    }
+
+    /* ─── Hero Section ─── */
+    .hero {
+      text-align: center;
+      padding: 30px 20px 20px;
+      background: radial-gradient(ellipse at 50% -20%, rgba(34, 197, 94, .18) 0%, transparent 68%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(34, 197, 94, .14);
+      border: 1px solid var(--green-500);
+      color: var(--green-300);
+      font-size: .78rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.7rem, 3.8vw, 2.5rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--green-400);
+      text-shadow: 0 0 24px rgba(74, 222, 128, .35);
+    }
+
+    .hero p {
+      color: var(--text-dim);
+      font-size: clamp(.88rem, 1.8vw, 1.05rem);
+      max-width: 660px;
+      margin: 0 auto 12px;
+    }
+
+    .formula-pill {
+      display: inline-block;
+      background: var(--surface-2);
+      border: 1.5px solid var(--border-bright);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-family: 'Courier New', monospace;
+      font-size: .82rem;
+      color: var(--amber-light);
+      font-weight: 700;
+    }
+
+    /* ─── Container & App Views ─── */
+    .container {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+
+    .app-view {
+      display: none;
+    }
+
+    .app-view.active {
+      display: block;
+      animation: fadeIn .25s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ─── Cards & Form (3D Spatial Skeuomorphism) ─── */
+    .card {
+      background: var(--surface);
+      border: 1.5px solid var(--border-bright);
+      border-radius: var(--radius);
+      padding: 26px;
+      margin-bottom: 26px;
+      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 0 25px rgba(34, 197, 94, 0.08);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .card:hover {
+      border-color: var(--green-400);
+      box-shadow: 0 28px 55px -10px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 35px rgba(74, 222, 128, 0.2);
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      
+    }
+
+    .card-sub {
+      color: var(--muted);
+      font-size: .88rem;
+      margin-bottom: 20px;
+      
+    }
+
+    .presets-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      background: rgba(14, 34, 22, 0.9);
+      border: 1.5px solid var(--border-bright);
+      border-radius: 12px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .preset-label {
+      font-size: .78rem;
+      font-weight: 800;
+      color: var(--amber-light);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      
+    }
+
+    .preset-btn {
+      background: linear-gradient(180deg, #1f422c 0%, #142e1d 100%);
+      border: 1px solid var(--border-bright);
+      color: var(--text);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #0a1b10, 0 6px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .preset-btn:hover {
+      background: linear-gradient(180deg, #285539 0%, #183824 100%);
+      color: #fff;
+      border-color: var(--green-400);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 0 #0a1b10, 0 10px 18px rgba(34, 197, 94, 0.35);
+    }
+
+    .preset-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #0a1b10, 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      
+    }
+
+    input,
+    select,
+    textarea {
+      background: #08180e;
+      border: 1.5px solid var(--border-bright);
+      color: var(--text);
+      font-family: inherit;
+      font-size: .95rem;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 11px 14px;
+      outline: none;
+      box-shadow:
+        inset 0 3px 7px rgba(0, 0, 0, 0.85),
+        inset 0 -1px 2px rgba(255, 255, 255, 0.05),
+        0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--green-400);
+      
+      box-shadow:
+        0 0 20px rgba(74, 222, 128, 0.35),
+        inset 0 2px 4px rgba(0, 0, 0, 0.6),
+        0 6px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .qty-hint {
+      font-size: .72rem;
+      color: var(--muted);
+      margin-top: 3px;
+      
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      padding: 13px 26px;
+      cursor: pointer;
+      box-shadow:
+        0 5px 0 #0d4420,
+        0 12px 24px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.38);
+      transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease, background 0.2s ease;
+    }
+
+    .btn:hover {
+      background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+      box-shadow:
+        0 7px 0 #0d4420,
+        0 16px 28px rgba(34, 197, 94, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow:
+        0 1px 0 #0d4420,
+        0 3px 8px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(180deg, #1b3824 0%, #112618 100%);
+      border: 1px solid var(--border-bright);
+      box-shadow:
+        0 4px 0 #08160d,
+        0 8px 18px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(180deg, #244b31 0%, #163220 100%);
+      box-shadow:
+        0 6px 0 #08160d,
+        0 12px 24px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(3px);
+      box-shadow:
+        0 1px 0 #08160d,
+        0 2px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ─── Results & Market Cards (3D Layered Spatial) ─── */
+    #results {
+      display: none;
+    }
+
+    #results.visible {
+      display: block;
+      animation: fadeIn .3s ease;
+    }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 28px 0 16px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .results-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      
+    }
+
+    .market-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .market-card {
+      background: rgba(14, 34, 22, 0.92);
+      border: 1.5px solid rgba(60, 119, 79, 0.85);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 22px;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+      position: relative;
+      box-shadow:
+        0 16px 36px -8px rgba(0, 0, 0, 0.85),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 0 20px rgba(34, 197, 94, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .market-card:hover {
+      border-color: var(--green-400);
+      background: rgba(22, 47, 31, 0.95);
+      box-shadow:
+        0 26px 52px -10px rgba(0, 0, 0, 0.95),
+        inset 0 1px 0 rgba(255, 255, 255, 0.32),
+        0 0 35px rgba(74, 222, 128, 0.25);
+      transform: translateY(-6px);
+    }
+
+    .rank-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 1.35rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      
+      transition: transform 0.3s ease;
+      animation: badgeBob3D 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes badgeBob3D {
+      0% {
+        transform: translateY(0px);
+      }
+
+      100% {
+        transform: translateY(-3px);
+      }
+    }
+
+    .rank-1 {
+      background: radial-gradient(circle at 35% 35%, rgba(254, 240, 138, 0.4) 0%, rgba(251, 191, 36, 0.18) 75%);
+      border: 2px solid var(--rank-1);
+      color: var(--rank-1);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.8), 0 0 22px rgba(251, 191, 36, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .rank-2 {
+      background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.4) 0%, rgba(226, 232, 240, 0.18) 75%);
+      border: 2px solid var(--rank-2);
+      color: var(--rank-2);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.8), 0 0 20px rgba(226, 232, 240, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .rank-3 {
+      background: radial-gradient(circle at 35% 35%, rgba(254, 215, 170, 0.4) 0%, rgba(251, 146, 60, 0.18) 75%);
+      border: 2px solid var(--rank-3);
+      color: var(--rank-3);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.8), 0 0 20px rgba(251, 146, 60, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .rank-n {
+      background: var(--surface-2);
+      border: 2px solid var(--border-bright);
+      color: var(--text-dim);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    .market-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .market-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: .8rem;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-bright);
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-weight: 600;
+    }
+
+    .net-return-col {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .net-label {
+      font-size: .75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .net-value {
+      font-size: 1.45rem;
+      font-weight: 800;
+    }
+
+    .net-positive {
+      color: var(--green-400);
+      text-shadow: 0 0 16px rgba(74, 222, 128, .25);
+    }
+
+    .net-negative {
+      color: var(--red);
+    }
+
+    .net-breakdown {
+      font-size: .76rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .insight-box {
+      margin-top: 18px;
+      background: rgba(251, 191, 36, .12);
+      border: 1.5px solid var(--amber);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      font-size: .92rem;
+      color: #fef08a;
+      display: none;
+      line-height: 1.5;
+    }
+
+    /* ─── Recommendation Action Buttons ─── */
+    .action-btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+      
+    }
+
+    .action-pill-btn {
+      background: linear-gradient(180deg, rgba(30, 63, 43, 0.92) 0%, rgba(18, 38, 26, 0.98) 100%);
+      border: 1.5px solid var(--border-bright);
+      border-bottom: 3.5px solid rgba(13, 46, 25, 0.95);
+      color: var(--green-300);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: .8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      
+    }
+
+    .action-pill-btn:hover {
+      background: linear-gradient(180deg, var(--green-500) 0%, var(--green-700) 100%);
+      color: #fff;
+      border-color: var(--green-300);
+      border-bottom: 3.5px solid #14532d;
+      box-shadow: 0 6px 18px rgba(34, 197, 94, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      transform: translateY(-2px);
+    }
+
+    .action-pill-btn:active {
+      transform: translateY(1.5px);
+      border-bottom-width: 1.5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-deal-sheet {
+      background: linear-gradient(180deg, rgba(251, 191, 36, 0.22) 0%, rgba(180, 83, 9, 0.28) 100%);
+      border: 1.5px solid var(--amber);
+      border-bottom: 3.5px solid #b45309;
+      color: #fef08a;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(254, 240, 138, 0.2);
+    }
+
+    .btn-deal-sheet:hover {
+      background: linear-gradient(180deg, #d97706 0%, #92400e 100%);
+      color: #fff;
+      border-color: #fde047;
+      border-bottom: 3.5px solid #78350f;
+      box-shadow: 0 6px 18px rgba(251, 191, 36, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-deal-sheet:active {
+      transform: translateY(1.5px);
+      border-bottom-width: 1.5px;
+    }
+
+    /* ─── Logistics Fleet Directory ─── */
+    .carrier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .carrier-card {
+      background: linear-gradient(160deg, rgba(17, 36, 25, 0.94) 0%, rgba(10, 22, 15, 0.98) 100%);
+      border: 1.5px solid var(--border-bright);
+      border-bottom: 4px solid rgba(13, 31, 20, 0.95);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      position: relative;
+      box-shadow:
+        0 14px 32px -8px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 0 16px rgba(34, 197, 94, 0.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+    }
+
+    .carrier-card:hover {
+      border-color: var(--green-400);
+      background: linear-gradient(160deg, rgba(23, 49, 34, 0.96) 0%, rgba(12, 27, 19, 0.98) 100%);
+      box-shadow:
+        0 24px 48px -10px rgba(0, 0, 0, 0.9),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 0 28px rgba(74, 222, 128, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .carrier-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      
+    }
+
+    .carrier-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .carrier-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(34, 197, 94, 0.15);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: .82rem;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+      
+    }
+
+    .carrier-spec-item label {
+      display: block;
+      font-size: .68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .carrier-spec-item .val {
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* ─── Price Trend Section ─── */
+    .trend-section {
+      margin-top: 28px;
+      background: linear-gradient(170deg, rgba(16, 36, 24, 0.95) 0%, rgba(9, 21, 14, 0.98) 100%);
+      border: 1.5px solid var(--border-bright);
+      border-bottom: 4px solid rgba(13, 31, 20, 0.9);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .trend-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 20px;
+      border-bottom: 1.5px solid var(--border);
+      padding-bottom: 14px;
+      
+    }
+
+    .market-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .market-tab {
+      background: var(--surface-2);
+      border: 1.5px solid var(--border-bright);
+      border-bottom: 3px solid rgba(0, 0, 0, 0.45);
+      color: var(--text-dim);
+      padding: 7px 15px;
+      border-radius: 8px;
+      font-size: .84rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+      
+    }
+
+    .market-tab:hover {
+      color: #fff;
+      border-color: var(--green-400);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .market-tab:active {
+      transform: translateY(1px);
+      border-bottom-width: 1.5px;
+    }
+
+    .market-tab.active {
+      background: linear-gradient(180deg, rgba(34, 197, 94, 0.3) 0%, rgba(22, 101, 52, 0.4) 100%);
+      border-color: var(--green-400);
+      border-bottom: 3px solid var(--green-600);
+      color: var(--green-200);
+      box-shadow: 0 0 16px rgba(34, 197, 94, .35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .trend-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 22px;
+      
+    }
+
+    @media (max-width: 820px) {
+      .trend-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chart-container {
+      background: rgba(9, 20, 14, 0.85);
+      border: 1.5px solid var(--border-bright);
+      border-radius: 12px;
+      padding: 18px 14px 12px;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6), 0 8px 20px rgba(0, 0, 0, 0.4);
+      
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 210px;
+      overflow: visible;
+    }
+
+    .chart-label {
+      font-size: 12px;
+      fill: var(--text-dim);
+      font-weight: 600;
+    }
+
+    .chart-grid-line {
+      stroke: rgba(61, 117, 79, 0.5);
+      stroke-dasharray: 4, 4;
+      stroke-width: 1.2;
+    }
+
+    .chart-area {
+      fill: url(#greenGradient);
+      opacity: 0.35;
+    }
+
+    .chart-line {
+      fill: none;
+      stroke: var(--green-400);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .chart-dot {
+      fill: #fff;
+      stroke: var(--green-500);
+      stroke-width: 3.5;
+      cursor: pointer;
+    }
+
+    .trend-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+
+    .trend-table th {
+      color: var(--green-300);
+      font-size: .75rem;
+      text-transform: uppercase;
+      padding: 10px 12px;
+      border-bottom: 1.5px solid var(--border-bright);
+      background: rgba(0, 0, 0, .2);
+    }
+
+    .trend-table td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .price-pill {
+      font-weight: 800;
+      color: var(--green-300);
+      background: rgba(34, 197, 94, .18);
+      padding: 3px 8px;
+      border-radius: 5px;
+      border: 1px solid rgba(34, 197, 94, .3);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+      
+    }
+
+    .stat-badge {
+      background: linear-gradient(160deg, rgba(19, 41, 28, 0.9) 0%, rgba(12, 27, 18, 0.95) 100%);
+      border: 1.5px solid var(--border-bright);
+      border-bottom: 3px solid rgba(0, 0, 0, 0.45);
+      border-radius: 10px;
+      padding: 14px 16px;
+      text-align: center;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      
+      transition: transform .25s ease, border-color .25s ease;
+    }
+
+    .stat-badge:hover {
+      transform: translateY(-3px);
+      border-color: var(--green-400);
+    }
+
+    .stat-badge-label {
+      font-size: .72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .stat-badge-val {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* ─── Buyer Marketplace View ─── */
+    .buyer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .buyer-card {
+      background: linear-gradient(160deg, rgba(17, 36, 25, 0.94) 0%, rgba(10, 22, 15, 0.98) 100%);
+      border: 1.5px solid var(--border-bright);
+      border-bottom: 4px solid rgba(13, 31, 20, 0.95);
+      border-radius: var(--radius);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      position: relative;
+      box-shadow:
+        0 14px 32px -8px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 0 16px rgba(34, 197, 94, 0.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+    }
+
+    .buyer-card:hover {
+      border-color: var(--green-400);
+      background: linear-gradient(160deg, rgba(23, 49, 34, 0.96) 0%, rgba(12, 27, 19, 0.98) 100%);
+      box-shadow:
+        0 24px 48px -10px rgba(0, 0, 0, 0.9),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 0 28px rgba(74, 222, 128, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .buyer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      
+    }
+
+    .buyer-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .badge-verified {
+      background: linear-gradient(180deg, rgba(34, 197, 94, 0.25) 0%, rgba(22, 101, 52, 0.25) 100%);
+      border: 1px solid var(--green-400);
+      color: var(--green-300);
+      font-size: .74rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      
+    }
+
+    .buyer-deal {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(34, 197, 94, 0.15);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+      
+    }
+
+    .buyer-deal-item label {
+      font-size: .68rem;
+      color: var(--muted);
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .buyer-deal-item .val {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* ─── Admin Intelligence View ─── */
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .admin-stat-card {
+      background: linear-gradient(160deg, rgba(17, 36, 25, 0.94) 0%, rgba(10, 22, 15, 0.98) 100%);
+      border: 1.5px solid var(--border-bright);
+      border-bottom: 4px solid rgba(13, 31, 20, 0.95);
+      border-radius: var(--radius);
+      padding: 22px;
+      text-align: center;
+      position: relative;
+      box-shadow:
+        0 14px 32px -8px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 0 16px rgba(34, 197, 94, 0.05);
+      backdrop-filter: blur(14px);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+    }
+
+    .admin-stat-card:hover {
+      border-color: var(--green-400);
+      box-shadow:
+        0 24px 48px -10px rgba(0, 0, 0, 0.9),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 0 28px rgba(74, 222, 128, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .admin-stat-card .val {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--green-400);
+      text-shadow: 0 0 20px rgba(74, 222, 128, 0.35);
+      
+      display: block;
+    }
+
+    .admin-stat-card .lbl {
+      font-size: .78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-top: 6px;
+      
+    }
+
+    .regional-status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: .8rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .status-surplus {
+      background: rgba(59, 130, 246, 0.18);
+      border: 1px solid var(--blue);
+      color: var(--blue);
+    }
+
+    .status-balanced {
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid var(--green-500);
+      color: var(--green-300);
+    }
+
+    .status-shortage {
+      background: rgba(239, 68, 68, 0.18);
+      border: 1px solid var(--red);
+      color: var(--red);
+    }
+
+    /* ─── Interactive Map Styles (Leaflet / OpenStreetMap) ─── */
+    .map-container {
+      height: 380px;
+      width: 100%;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border-bright);
+      margin-top: 14px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      background: var(--surface-2);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .leaflet-container {
+      background: #0b1a10 !important;
+      font-family: inherit !important;
+    }
+
+    .leaflet-popup-content-wrapper {
+      background: var(--surface) !important;
+      color: var(--text) !important;
+      border: 1.5px solid var(--border-bright) !important;
+      border-radius: 8px !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7) !important;
+    }
+
+    .leaflet-popup-tip {
+      background: var(--surface) !important;
+    }
+
+    .leaflet-bar a {
+      background-color: var(--surface-2) !important;
+      color: var(--text) !important;
+      border-bottom: 1px solid var(--border) !important;
+    }
+
+    .leaflet-bar a:hover {
+      background-color: var(--surface-3) !important;
+      color: var(--green-300) !important;
+    }
+
+    /* ─── Spatial 3D Modals ─── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(10, 24, 16, 0.85) 0%, rgba(3, 8, 5, 0.94) 100%);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: none;
+      place-items: center;
+      z-index: 200;
+      padding: 20px;
+    }
+
+    .modal-backdrop.active {
+      display: grid;
+    }
+
+    .modal-card {
+      background: linear-gradient(165deg, rgba(18, 40, 27, 0.98) 0%, rgba(9, 21, 14, 0.99) 100%);
+      border: 1.5px solid var(--border-bright);
+      border-bottom: 5px solid rgba(13, 31, 20, 0.98);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 540px;
+      width: 100%;
+      box-shadow:
+        0 35px 80px -15px rgba(0, 0, 0, 0.95),
+        0 0 50px rgba(34, 197, 94, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      animation: modal3DFlyIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes modal3DFlyIn {
+      0% {
+        opacity: 0;
+        transform: translateY(35px) scale(0.92);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      border-bottom: 1.5px solid var(--border);
+      padding-bottom: 12px;
+      
+    }
+
+    .modal-close {
+      background: var(--surface-2);
+      border: 1.5px solid var(--border-bright);
+      border-bottom: 3px solid rgba(0, 0, 0, 0.4);
+      color: var(--text-dim);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-close:hover {
+      color: #fff;
+      background: var(--surface-3);
+      border-color: var(--green-400);
+      transform: translateY(-2px);
+    }
+
+    .modal-close:active {
+      transform: translateY(1px);
+      border-bottom-width: 1.5px;
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+      
+    }
+
+    .modal-item {
+      background: rgba(9, 21, 14, 0.7);
+      border: 1.5px solid var(--border-bright);
+      border-radius: 10px;
+      padding: 12px 16px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+      
+    }
+
+    .formula-breakdown {
+      background: rgba(0, 0, 0, 0.55);
+      border: 1.5px dashed var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: 'Courier New', monospace;
+      font-size: .84rem;
+      color: var(--amber-light);
+      line-height: 1.6;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 15px rgba(251, 191, 36, 0.1);
+      
+    }
+
+    /* ─── Toast Notifications ─── */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--surface-2);
+      border: 1.5px solid var(--green-500);
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      font-weight: 600;
+      font-size: .9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastIn .25s ease;
+    }
+
+    @keyframes toastIn {
+      from {
+        transform: translateX(50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .error-box {
+      margin-top: 14px;
+      background: rgba(248, 113, 113, .12);
+      border: 1.5px solid var(--red);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: #fca5a5;
+      font-size: .88rem;
+      display: none;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ── Tactile Crop Presets & Interactive Cards ── */
+    .preset-btn {
+      transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .preset-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      border-color: var(--green-400);
+      background: rgba(34, 197, 94, 0.2);
+      box-shadow: 0 6px 16px rgba(34, 197, 94, 0.25);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MAIN APPLICATION SHELL (VISIBLE DIRECTLY BY DEFAULT)
+  ════════════════════════════════════════════════════════════════════ -->
+  <div id="app-shell" style="display: block;">
+
+    <!-- ── Header ── -->
+    <header>
+      <div class="brand-group">
+        <div class="logo-icon">🌿</div>
+        <div>
+          <div class="logo-text">Kisan<span>Link</span> AI</div>
+          <div style="font-size: .72rem; color: var(--muted); font-weight: 600;">SIH26132 · Net Return Platform</div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" id="main-nav-tabs">
+        <button id="tab-btn-recommender" class="nav-tab-btn active" data-nav-view="recommender" onclick="switchTab('recommender')">🌾 Sell Produce</button>
+        <button id="tab-btn-history" class="nav-tab-btn" data-nav-view="history" onclick="switchTab('history')">📜 My Submissions</button>
+        <button id="tab-btn-buyers" class="nav-tab-btn" data-nav-view="buyers" onclick="switchTab('buyers')">🏢 Buyer Marketplace</button>
+        <button id="tab-btn-logistics" class="nav-tab-btn" data-nav-view="logistics" onclick="switchTab('logistics')">🚚 Smart Logistics</button>
+        <button id="tab-btn-report" class="nav-tab-btn" data-nav-view="report" onclick="switchTab('report')">📢 Report Price</button>
+        <button id="tab-btn-markets" class="nav-tab-btn" data-nav-view="markets" onclick="switchTab('markets')">🗺️ Markets</button>
+        <button id="tab-btn-admin" class="nav-tab-btn" data-nav-view="admin" onclick="switchTab('admin')">🏛️ Regional Admin</button>
+      </nav>
+
+      <!-- Platform Status & Alerts -->
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: .78rem; color: var(--green-300); padding: 5px 12px; background: rgba(34, 197, 94, 0.12); border-radius: 20px; border: 1px solid var(--border-bright); display: flex; align-items: center; gap: 6px;">
+          <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green-400);"></span>
+          <span style="font-weight: 600;">Direct Access</span>
+        </span>
+        <button class="farmer-pill-btn"
+          style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: .85rem; border-color: var(--amber);"
+          onclick="openAlertsModal()">
+          <span>🔔</span>
+          <span>Alerts</span>
+          <span id="alerts-count-badge"
+            style="background: var(--amber); color: #000; border-radius: 10px; padding: 1px 6px; font-size: .72rem; font-weight: 800;">3</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── Hero Banner ── -->
+    <div class="hero" id="hero-banner">
+      <div class="hero-badge">🏆 Maximizing Farmer Actual Profit</div>
+      <h1>The Right Market. The Right Price.<br /><em>The Right Selling Decision</em>.</h1>
+      <p>Existing mandi apps show listed prices. KisanLink converts that data into an actual decision by estimating your
+        true net return across candidate markets.</p>
+      <div class="formula-pill">Expected Net Return = (Price × Qty) − Transport Cost − Mandi & Handling Fees</div>
+    </div>
+
+    <div class="container">
+
+      <!-- ═══════════════════════════════════════════════════════════════════
+         VIEW 1: SELL PRODUCE & NET RETURN RECOMMENDER
+    ════════════════════════════════════════════════════════════════════ -->
+      <div class="app-view active" id="view-recommender">
+
+        <!-- Quick Crop Presets -->
+        <div class="presets-bar">
+          <span class="preset-label">⚡ Quick Crop Scenarios:</span>
+          <button class="preset-btn" onclick="applyPreset('Tomato', 500, 'Pune', 'mini_truck')">Pune (500kg
+            Tomato)</button>
+          <button class="preset-btn" onclick="applyPreset('Onion', 1000, 'Nashik', 'mini_truck')">Nashik (1000kg
+            Onion)</button>
+          <button class="preset-btn" onclick="applyPreset('Soybean', 2000, 'Nagpur', 'large_truck')">Nagpur (2000kg
+            Soybean)</button>
+          <button class="preset-btn" onclick="applyPreset('Wheat', 1500, 'Aurangabad', 'mini_truck')">Aurangabad (1500kg
+            Wheat)</button>
+        </div>
+
+        <!-- Produce Form -->
+        <div class="card">
+          <div class="card-title">🌾 Add Your Produce</div>
+          <div class="card-sub">Submit your crop details to calculate and rank candidate APMCs by actual expected
+            profit.</div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="crop">Crop</label>
+              <select id="crop">
+                <option value="Tomato">🍅 Tomato</option>
+                <option value="Onion">🧅 Onion</option>
+                <option value="Potato">🥔 Potato</option>
+                <option value="Soybean">🌱 Soybean</option>
+                <option value="Wheat">🌾 Wheat</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="quantity">Quantity (kg)</label>
+              <input type="number" id="quantity" min="1" max="50000" step="50" placeholder="e.g. 500" value="500" />
+              <div class="qty-hint">e.g. 500 kg = 5 quintals</div>
+            </div>
+
+            <div class="field">
+              <label for="location">Farmer Farm Location</label>
+              <select id="location">
+                <option value="Pune">📍 Pune</option>
+                <option value="Nashik">📍 Nashik</option>
+                <option value="Aurangabad">📍 Aurangabad</option>
+                <option value="Nagpur">📍 Nagpur</option>
+                <option value="Solapur">📍 Solapur</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="vehicle">Vehicle Available</label>
+              <select id="vehicle">
+                <option value="mini_truck">🚛 Mini Truck (default)</option>
+                <option value="large_truck">🚚 Large Truck (bulk)</option>
+                <option value="auto">🛺 Auto (local)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="quality_grade">Quality / Grade</label>
+              <select id="quality_grade">
+                <option value="Grade A">🌟 Grade A (Premium)</option>
+                <option value="Grade B">⚖️ Grade B (Standard)</option>
+                <option value="Grade C">🍂 Grade C (Fair)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="harvest_date">Harvest / Ready Date</label>
+              <input type="date" id="harvest_date" />
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <button class="btn" id="submit-btn" onclick="submitProduceAndRecommend()">
+              <div class="spinner" id="spinner"></div>
+              <span id="btn-text">Compute & Save Net-Return Ranking →</span>
+            </button>
+            <button class="btn btn-secondary" onclick="calculateInstant()">
+              ⚡ Instant Simulation (No Save)
+            </button>
+          </div>
+
+          <div class="error-box" id="error-box"></div>
+        </div>
+
+        <!-- Recommendation Results -->
+        <div id="results">
+          <div class="results-header">
+            <div>
+              <div class="results-title">📊 Ranked Market Recommendations</div>
+              <div style="font-size: .82rem; color: var(--muted);" id="results-meta"></div>
+            </div>
+            <span
+              style="font-size: .8rem; font-weight: 700; color: var(--green-300); background: var(--surface-2); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-bright);">
+              Primary Sort: Expected Net Return
+            </span>
+          </div>
+
+          <div class="market-list" id="market-list"></div>
+          <div class="insight-box" id="insight-box"></div>
+
+          <!-- Interactive APMC Market Transit & Route Map (PRD §6 / TRD §1) -->
+          <div class="card" id="recom-map-card" style="margin-top: 24px; padding: 20px;">
+            <div style="margin-bottom: 14px;">
+              <div style="font-size: 1.18rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px;">
+                <span>🗺️</span> <span>Interactive APMC Market Route Map</span>
+                <span class="meta-pill" style="color: var(--green-300); border-color: var(--green-500); font-size: .72rem;">OpenStreetMap</span>
+              </div>
+              <div style="font-size: .8rem; color: var(--muted); margin-top: 2px;">
+                Geographical coordinate projection showing candidate APMC markets, direct transit routes, and distance from your farm origin.
+              </div>
+            </div>
+
+            <!-- 2D Leaflet Container (Visible Directly) -->
+            <div id="recommendation-map" class="map-container" style="display: block; height: 440px; border-radius: var(--radius); border: 1.5px solid var(--border-bright);"></div>
+          </div>
+
+          <!-- 5-Day Historical Price Trend Section -->
+          <div class="trend-section" id="trend-section">
+            <div class="trend-header">
+              <div>
+                <div style="font-size: 1.25rem; font-weight: 800; color: #fff;" id="trend-market-title">Market Price
+                  Trend</div>
+                <div style="font-size: .78rem; color: var(--muted);">Historical modal prices & daily arrival volume
+                </div>
+              </div>
+              <div class="market-tabs" id="market-tabs"></div>
+            </div>
+
+            <div class="trend-grid">
+              <div class="chart-container">
+                <svg class="chart-svg" id="chart-svg" viewBox="0 0 420 200">
+                  <defs>
+                    <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#4ade80" stop-opacity="0.5" />
+                      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.0" />
+                    </linearGradient>
+                  </defs>
+                  <g id="chart-grid"></g>
+                  <path id="chart-area-path" class="chart-area" d="" />
+                  <path id="chart-line-path" class="chart-line" d="" />
+                  <g id="chart-points"></g>
+                  <g id="chart-labels"></g>
+                </svg>
+              </div>
+
+              <div>
+                <div style="font-size: .85rem; font-weight: 700; color: var(--green-400); margin-bottom: 8px;">Mandi
+                  Price & Arrival Ledger</div>
+                <div style="overflow-x: auto;">
+                  <table class="trend-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Modal Price</th>
+                        <th>Range</th>
+                        <th>Arrivals</th>
+                      </tr>
+                    </thead>
+                    <tbody id="trend-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="stats-row" id="trend-stats-row"></div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════════════════════════════════
+         VIEW 2: MY SUBMISSIONS (HISTORY)
+    ════════════════════════════════════════════════════════════════════ -->
+      <div class="app-view" id="view-history">
+        <div class="card">
+          <div class="card-title">📜 Farmer Submission History</div>
+          <div class="card-sub">Previously evaluated produce submissions and their stored recommendation rankings.</div>
+          <div id="history-container">
+            <div style="text-align: center; color: var(--muted); padding: 30px;">Loading submission history...</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════════════════════════════════
+         VIEW 3: BUYER MARKETPLACE
+    ════════════════════════════════════════════════════════════════════ -->
+      <div class="app-view" id="view-buyers">
+        <div class="card">
+          <div class="card-title">🏢 Wholesale Buyer Marketplace</div>
+          <div class="card-sub">Direct bulk purchase orders from food processors, supermarket chains, and verified
+            aggregators.</div>
+
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
+            <select id="buyer-filter-crop" onchange="loadBuyerRequirements()" style="max-width: 200px;">
+              <option value="">All Crops</option>
+              <option value="Tomato">Tomato</option>
+              <option value="Onion">Onion</option>
+              <option value="Potato">Potato</option>
+              <option value="Soybean">Soybean</option>
+              <option value="Wheat">Wheat</option>
+            </select>
+            <select id="buyer-filter-location" onchange="loadBuyerRequirements()" style="max-width: 200px;">
+              <option value="">All Regions</option>
+              <option value="Nashik">Nashik</option>
+              <option value="Pune">Pune</option>
+              <option value="Aurangabad">Aurangabad</option>
+              <option value="Nagpur">Nagpur</option>
+              <option value="Solapur">Solapur</option>
+            </select>
+          </div>
+
+          <div class="buyer-grid" id="buyer-requirements-list">
+            <div style="color: var(--muted); padding: 30px;">Loading active buyer requirements...</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════════════════════════════════
+         VIEW: SMART AGRICULTURAL LOGISTICS FLEET DIRECTORY
+    ════════════════════════════════════════════════════════════════════ -->
+      <div class="app-view" id="view-logistics">
+        <div class="card">
+          <div
+            style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 8px;">
+            <div>
+              <div class="card-title">🚚 Smart Agricultural Logistics Fleet Network</div>
+              <div class="card-sub">Registered agricultural freight operators across Maharashtra providing
+                payload-matched, guaranteed transport rates (TRD.md §4.1 & ARCHITECTURE.md §7).</div>
+            </div>
+            <div
+              style="background: rgba(34, 197, 94, 0.12); border: 1.5px solid var(--green-500); padding: 6px 14px; border-radius: 20px; font-size: .8rem; font-weight: 700; color: var(--green-300);">
+              ✓ 100% Verified Fleet Operators
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
+            <select id="logistics-filter-hub" onchange="loadLogisticsDirectory()" style="max-width: 200px;">
+              <option value="">All Base Hubs</option>
+              <option value="Pune">Pune</option>
+              <option value="Nashik">Nashik</option>
+              <option value="Aurangabad">Aurangabad</option>
+              <option value="Nagpur">Nagpur</option>
+              <option value="Solapur">Solapur</option>
+            </select>
+            <select id="logistics-filter-vehicle" onchange="loadLogisticsDirectory()" style="max-width: 200px;">
+              <option value="">All Vehicle Types</option>
+              <option value="">All Vehicles</option>
+              <option value="mini_truck">Mini Truck (1.5 - 1.8 Ton)</option>
+              <option value="large_truck">Large Truck (8 - 12 Ton)</option>
+              <option value="auto">Auto / 3-Wheeler (0.5 Ton)</option>
+            </select>
+          </div>
+
+          <div class="carrier-grid" id="logistics-providers-list">
+            <div style="color: var(--muted); padding: 30px;">Loading agricultural transport providers...</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════════════════════════════════
+         VIEW 4: REPORT MANDI PRICE (CROWDSOURCED DISCOVERY)
+    ════════════════════════════════════════════════════════════════════ -->
+      <div class="app-view" id="view-report">
+        <div class="card">
+          <div class="card-title">📢 Crowdsource Mandi Price</div>
+          <div class="card-sub">Submit locally observed market prices. Our AI validation layer benchmarks your report
+            against official Agmarknet modal data to calculate a verified confidence score (ADR-003).</div>
+
+          <form id="price-report-form" onsubmit="submitPriceReport(event)">
+            <div class="form-grid">
+              <div class="field">
+                <label for="rep-crop">Crop</label>
+                <select id="rep-crop">
+                  <option value="Tomato">🍅 Tomato</option>
+                  <option value="Onion">🧅 Onion</option>
+                  <option value="Potato">🥔 Potato</option>
+                  <option value="Soybean">🌱 Soybean</option>
+                  <option value="Wheat">🌾 Wheat</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="rep-market">Market / APMC</label>
+                <select id="rep-market">
+                  <option value="1">Nashik APMC</option>
+                  <option value="2">Pune Market A</option>
+                  <option value="3">Aurangabad Market B</option>
+                  <option value="4">Nagpur Market C</option>
+                  <option value="5">Solapur Market D</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="rep-price">Observed Price (₹/kg)</label>
+                <input type="number" id="rep-price" step="0.5" min="1" max="500" placeholder="e.g. 24.5" required />
+              </div>
+
+              <div class="field">
+                <label for="rep-date">Observation Date</label>
+                <input type="date" id="rep-date" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn">
+              Submit & Verify Price →
+            </button>
+          </form>
+
+          <div id="report-feedback-box" style="margin-top: 18px; display: none;"></div>
+
+          <div style="margin-top: 28px;">
+            <div style="font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 10px;">Recent Crowdsourced
+              Observations</div>
+            <div id="recent-reports-table"></div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════════════════════════════════
+         VIEW 5: MARKETS DIRECTORY & MAP
+    ════════════════════════════════════════════════════════════════════ -->
+      <div class="app-view" id="view-markets">
+        <div class="card">
+          <div class="card-title">🗺️ APMC Markets Directory & Geographic Coverage</div>
+          <div class="card-sub">Monitored wholesale trading yards across Maharashtra with live modal rates and
+            geographical coordinates.</div>
+          <div id="markets-map" class="map-container" style="height: 400px;"></div>
+          <div id="markets-directory-grid"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+            <div style="color: var(--muted); padding: 30px;">Loading markets directory...</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════════════════════════════════
+         VIEW 6: ADMIN REGIONAL DASHBOARD
+    ════════════════════════════════════════════════════════════════════ -->
+      <div class="app-view" id="view-admin">
+        <div class="admin-stats-grid" id="admin-summary-stats">
+          <div class="admin-stat-card">
+            <div class="val" id="stat-markets">5</div>
+            <div class="lbl">APMC Markets</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="val" id="stat-buyers">5</div>
+            <div class="lbl">Verified Buyers</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="val" id="stat-demand">54,500 kg</div>
+            <div class="lbl">Active Demand</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="val" id="stat-submissions">0</div>
+            <div class="lbl">Farmer Submissions</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🌍 Regional Supply vs. Demand Intelligence</div>
+          <div class="card-sub">Government & APMC regional visibility detecting supply surplus and shortage areas.</div>
+          <table class="trend-table" style="margin-top: 10px;">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Market Arrivals (Qtl)</th>
+                <th>Buyer Demand (Kg)</th>
+                <th>Regional Status</th>
+              </tr>
+            </thead>
+            <tbody id="regional-table-body">
+              <tr>
+                <td colspan="4" style="text-align: center; color: var(--muted);">Loading regional intelligence...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div
+            style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 16px;">
+            <div>
+              <div class="card-title">📡 Official Government Agmarknet (data.gov.in) Ingestion Pipeline</div>
+              <div class="card-sub" style="margin-bottom: 0;">Automated pipeline pulling official APMC mandi wholesale
+                rates and arrival volumes into price_history (ARCHITECTURE.md §2).</div>
+            </div>
+            <div id="data-gov-status-badge"
+              style="background: var(--surface-2); border: 1.5px solid var(--border-bright); padding: 6px 14px; border-radius: 20px; font-size: .8rem; font-weight: 700; color: var(--green-300);">
+              Checking Government API...
+            </div>
+          </div>
+
+          <div
+            style="display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 10px; max-width: 640px;">
+            <input type="text" id="custom-agmarknet-key"
+              placeholder="Enter data.gov.in API Key (Optional — leave blank for official APMC benchmark feed)"
+              style="font-size: .85rem;" />
+            <button class="btn" style="padding: 10px 20px; font-size: .88rem; white-space: nowrap;"
+              onclick="triggerAgmarknetSync()">
+              🔄 Ingest Daily Feeds Now
+            </button>
+          </div>
+          <div id="agmarknet-sync-feedback" style="display: none; margin-top: 10px;"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🚨 Price Anomaly Detection Radar</div>
+          <div class="card-sub">Statistical outlier detection flagging unusual price spikes or drops exceeding standard
+            deviation tolerance.</div>
+          <div id="anomaly-radar-list"></div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <!-- ── Detail Breakdown Modal ── -->
+    <div class="modal-backdrop" id="modal-backdrop" onclick="closeModal(event)">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div class="modal-title" id="modal-market-name">Market Details</div>
+            <div style="font-size: .8rem; color: var(--muted); margin-top: 2px;" id="modal-market-region"></div>
+          </div>
+          <button class="modal-close" onclick="closeModalDirect()">✕</button>
+        </div>
+
+        <div class="modal-grid" id="modal-grid"></div>
+
+        <div
+          style="font-size: .75rem; color: var(--muted); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">
+          Core Formula Execution (TRD.md §4.1 - 4.2)
+        </div>
+        <div class="formula-breakdown" id="modal-breakdown"></div>
+      </div>
+    </div>
+
+
+    <!-- ── Smart Logistics Transporter Matching Modal ── -->
+    <div class="modal-backdrop" id="logistics-modal-backdrop" onclick="closeLogisticsModal(event)">
+      <div class="modal-card" style="max-width: 680px;">
+        <div class="modal-header">
+          <div>
+            <div class="modal-title">🚚 Matched Agricultural Transporters</div>
+            <div style="font-size: .8rem; color: var(--muted); margin-top: 2px;" id="logistics-modal-subtitle">
+              Matching verified carriers for route and produce payload
+            </div>
+          </div>
+          <button class="modal-close" onclick="closeLogisticsModalDirect()">✕</button>
+        </div>
+
+        <div id="logistics-modal-list"
+          style="display: flex; flex-direction: column; gap: 12px; max-height: 440px; overflow-y: auto;">
+          <div style="color: var(--muted); padding: 20px; text-align: center;">Calculating transporter matching
+            quotes...</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ── Smart Alerts Modal ── -->
+    <div class="modal-backdrop" id="alerts-modal-backdrop" onclick="closeAlertsModal(event)">
+      <div class="modal-card" style="max-width: 600px;">
+        <div class="modal-header">
+          <div>
+            <div class="modal-title">🔔 Smart Opportunities & Alerts</div>
+            <div style="font-size: .8rem; color: var(--muted); margin-top: 2px;">Real-time buyer purchase premiums,
+              price surges, and arrival alerts (PRD.md §6).</div>
+          </div>
+          <button class="modal-close" onclick="closeAlertsModalDirect()">✕</button>
+        </div>
+
+        <div id="alerts-list-container"
+          style="display: flex; flex-direction: column; gap: 10px; max-height: 420px; overflow-y: auto;">
+          <div style="color: var(--muted); padding: 20px; text-align: center;">Loading smart alerts...</div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- /#app-shell -->
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container"></div>
+
+
+  <!-- ── Script Logic ── -->
+  <script>
+    const API = (window.location.origin && window.location.origin !== 'null' && window.location.protocol.startsWith('http')) ? window.location.origin : 'http://localhost:8000';
+
+    const FARMER_LOCATIONS = {
+      "Pune": [18.5204, 73.8567],
+      "Nashik": [20.0059, 73.7797],
+      "Aurangabad": [19.8762, 75.3433],
+      "Nagpur": [21.1458, 79.0882],
+      "Solapur": [17.6868, 75.9064]
+    };
+
+    let recomMap = null;
+    let recomMapLayerGroup = null;
+    let marketsDirMap = null;
+    let marketsDirLayerGroup = null;
+
+    let currentFarmer = {
+      id: 1,
+      name: "Farmer",
+      mobile_number: "9876543210",
+      location: "Pune",
+      farm_size_acres: 5.0
+    };
+
+    let currentMarkets = [];
+    let currentParams = {};
+    let selectedMarketIdx = 0;
+
+    const RANK_MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' };
+    const TREND_ICON = { up: '↑', down: '↓', stable: '→' };
+
+    // Safe date initializers
+    try {
+      const hd = document.getElementById('harvest_date');
+      if (hd) hd.value = new Date().toISOString().split('T')[0];
+      const rd = document.getElementById('rep-date');
+      if (rd) rd.value = new Date().toISOString().split('T')[0];
+    } catch (e) {}
+
+    function fmt(val) {
+      if (val === undefined || val === null) return '—';
+      const abs = Math.abs(val);
+      const s = '₹' + abs.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+      return val < 0 ? '−' + s : s;
+    }
+
+    function showToast(msg, icon = '✓') {
+      try {
+        const c = document.getElementById('toast-container');
+        if (!c) return;
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.innerHTML = `<span>${icon}</span> <span>${msg}</span>`;
+        c.appendChild(t);
+        setTimeout(() => {
+          t.style.opacity = '0';
+          t.style.transform = 'translateY(10px)';
+          t.style.transition = 'all .3s';
+          setTimeout(() => t.remove(), 300);
+        }, 3500);
+      } catch (e) {}
+    }
+
+    // ── Top-Level Tab Switching Engine ──
+    window.switchTab = function(viewId, updateHash = true) {
+      try {
+        const validViews = ['recommender', 'history', 'buyers', 'logistics', 'report', 'markets', 'admin'];
+        if (!validViews.includes(viewId)) viewId = 'recommender';
+
+        // 1. Hide all views and show target view
+        document.querySelectorAll('.app-view').forEach(v => {
+          v.classList.remove('active');
+          v.style.display = 'none';
+        });
+        const target = document.getElementById('view-' + viewId);
+        if (target) {
+          target.classList.add('active');
+          target.style.display = 'block';
+        }
+
+        // 2. Update navigation tab active class
+        document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+        const tabBtn = document.getElementById('tab-btn-' + viewId) || 
+                       document.querySelector(`.nav-tab-btn[data-nav-view="${viewId}"]`);
+        if (tabBtn) tabBtn.classList.add('active');
+
+        // 3. Toggle hero banner
+        const hero = document.getElementById('hero-banner');
+        if (hero) {
+          hero.style.display = (viewId === 'recommender') ? 'block' : 'none';
+        }
+
+        // 4. Update hash safely
+        try {
+          if (updateHash && window.location.hash !== '#' + viewId) {
+            history.pushState(null, '', '#' + viewId);
+          }
+        } catch (e) {}
+
+        // 5. Scroll to top
+        window.scrollTo(0, 0);
+
+        // 6. Data fetches
+        if (viewId === 'history' && typeof loadSubmissionHistory === 'function') loadSubmissionHistory();
+        if (viewId === 'buyers' && typeof loadBuyerRequirements === 'function') loadBuyerRequirements();
+        if (viewId === 'logistics' && typeof loadLogisticsDirectory === 'function') loadLogisticsDirectory();
+        if (viewId === 'report' && typeof loadRecentReports === 'function') loadRecentReports();
+        if (viewId === 'markets' && typeof loadMarketsDirectory === 'function') {
+          loadMarketsDirectory();
+          if (typeof marketsDirMap !== 'undefined' && marketsDirMap) marketsDirMap.invalidateSize();
+        }
+        if (viewId === 'admin' && typeof loadAdminDashboard === 'function') {
+          loadAdminDashboard();
+          if (typeof checkDataGovStatus === 'function') checkDataGovStatus();
+        }
+        if (viewId === 'recommender' && typeof recomMap !== 'undefined' && recomMap) {
+          recomMap.invalidateSize();
+        }
+      } catch (err) {
+        console.error('switchTab error:', err);
+      }
+    };
+
+    function handleRoute() {
+      const hash = window.location.hash.replace('#', '').trim();
+      const validViews = ['recommender', 'history', 'buyers', 'logistics', 'report', 'markets', 'admin'];
+      if (validViews.includes(hash)) {
+        window.switchTab(hash, false);
+      } else {
+        window.switchTab('recommender', false);
+      }
+    }
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('DOMContentLoaded', handleRoute);
+    // Boot route immediately
+    handleRoute();
+
+    // ── VIEW 1: RECOMMENDATIONS ──
+    async function submitProduceAndRecommend() {
+      const crop = document.getElementById('crop').value;
+      const quantity = parseFloat(document.getElementById('quantity').value);
+      const location = document.getElementById('location').value;
+      const vehicle = document.getElementById('vehicle').value;
+      const quality_grade = document.getElementById('quality_grade').value;
+      const harvest_date = document.getElementById('harvest_date').value;
+
+      if (!currentFarmer) {
+        currentFarmer = { id: 1, name: "Farmer", location: location || "Pune", farm_size_acres: 5.0 };
+      } else {
+        currentFarmer.location = location || "Pune";
+      }
+
+      if (!quantity || quantity <= 0) {
+        showToast('Please enter a valid quantity (> 0 kg)', '⚠️');
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const res = await fetch(API + '/produce', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            farmer_id: currentFarmer.id,
+            crop,
+            quantity_kg: quantity,
+            location,
+            vehicle_type: vehicle,
+            quality_grade,
+            harvest_date
+          })
+        });
+
+        if (!res.ok) throw new Error('Failed to process produce submission.');
+        const data = await res.json();
+        currentMarkets = data.recommendations;
+        currentParams = { crop, quantity, location, vehicle };
+        selectedMarketIdx = 0;
+        renderResults({
+          crop,
+          quantity_kg: quantity,
+          location,
+          vehicle_type: vehicle,
+          markets: data.recommendations
+        });
+        showToast(`Produce submission #${data.submission_id} recorded & saved!`);
+      } catch (err) {
+        showToast(err.message, '⚠️');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function calculateInstant() {
+      const crop = document.getElementById('crop').value;
+      const quantity = parseFloat(document.getElementById('quantity').value);
+      const location = document.getElementById('location').value;
+      const vehicle = document.getElementById('vehicle').value;
+
+      if (!quantity || quantity <= 0) {
+        showToast('Please enter a valid quantity (> 0 kg)', '⚠️');
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const res = await fetch(API + '/recommendations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ crop, quantity_kg: quantity, location, vehicle_type: vehicle })
+        });
+        const data = await res.json();
+        currentMarkets = data.markets;
+        currentParams = { crop, quantity, location, vehicle };
+        selectedMarketIdx = 0;
+        renderResults(data);
+      } catch (err) {
+        showToast(err.message, '⚠️');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function setLoading(isLoading) {
+      document.getElementById('spinner').style.display = isLoading ? 'inline-block' : 'none';
+      document.getElementById('btn-text').textContent = isLoading ? 'Computing Net Return...' : 'Compute & Save Net-Return Ranking →';
+      document.getElementById('submit-btn').disabled = isLoading;
+    }
+
+    function renderResults(data) {
+      const { crop, quantity_kg, location, vehicle_type, markets } = data;
+      document.getElementById('results-meta').textContent = `${quantity_kg} kg ${crop} · from ${location} · ${vehicle_type.replace('_', ' ')}`;
+
+      const list = document.getElementById('market-list');
+      list.innerHTML = '';
+
+      markets.forEach((m, idx) => {
+        const rank = m.rank;
+        const isPos = m.expected_net_return >= 0;
+        const netClass = isPos ? 'net-positive' : 'net-negative';
+        const badgeClass = rank <= 3 ? `rank-${rank}` : 'rank-n';
+        const badgeMedal = RANK_MEDALS[rank] || '#' + rank;
+        const tIcon = TREND_ICON[m.trend] || '→';
+
+        const card = document.createElement('div');
+        card.className = 'market-card';
+        card.style.cursor = 'pointer';
+        card.onclick = () => openMarketModal(idx);
+        card.innerHTML = `
+          <div class="rank-badge ${badgeClass}">${badgeMedal}</div>
+          <div>
+            <div class="market-name" style="display:flex; align-items:center; gap:8px;">
+              ${m.market_name}
+              <span style="font-size: .72rem; color: var(--muted); text-decoration: underline;">Breakdown</span>
+            </div>
+            <div class="market-meta">
+              <span class="meta-pill">📍 ${m.distance_km} km</span>
+              <span class="meta-pill">Predicted: ₹${m.predicted_price}/kg</span>
+              <span class="meta-pill" style="color: ${m.trend === 'up' ? 'var(--green-300)' : 'var(--amber)'}">
+                ${tIcon} Trend: ${m.trend}
+              </span>
+              <span class="meta-pill" style="color: ${m.demand_level === 'High' ? 'var(--green-300)' : 'var(--amber)'}">
+                Demand: ${m.demand_level}
+              </span>
+              <span class="meta-pill">Transport: ${fmt(m.transport_cost)}</span>
+              <span class="meta-pill">Confidence: ${(m.confidence * 100).toFixed(0)}%</span>
+            </div>
+            <div class="action-btn-row" onclick="event.stopPropagation();">
+              <button class="action-pill-btn" onclick="openLogisticsModal(${idx})">
+                🚚 Match Logistics
+              </button>
+              <button class="action-pill-btn btn-deal-sheet" onclick="downloadDealSheet(${idx})">
+                📄 Download Deal Sheet
+              </button>
+            </div>
+          </div>
+          <div class="net-return-col">
+            <div class="net-label">Expected Net Return</div>
+            <div class="net-value ${netClass}">${fmt(m.expected_net_return)}</div>
+            <div class="net-breakdown">Rev ${fmt(m.expected_revenue)} − Trans ${fmt(m.transport_cost)} − Fees ${fmt(m.other_costs)}</div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+
+      // Price != Profit Differentiator Insight
+      const topByNet = markets[0];
+      const topByPrice = [...markets].sort((a, b) => b.predicted_price - a.predicted_price)[0];
+      const insightBox = document.getElementById('insight-box');
+      if (topByNet.market_name !== topByPrice.market_name) {
+        insightBox.style.display = 'block';
+        insightBox.innerHTML = `
+          <strong>💡 Core Differentiator (Price ≠ Profit):</strong>
+          <strong>${topByPrice.market_name}</strong> has the highest mandi price
+          (₹${topByPrice.predicted_price}/kg), but <strong>${topByNet.market_name}</strong>
+          yields the highest actual take-home profit (${fmt(topByNet.expected_net_return)} vs
+          ${fmt(topByPrice.expected_net_return)}) due to significant transportation savings!
+        `;
+      } else {
+        insightBox.style.display = 'none';
+      }
+
+      renderPriceTrendSection(markets);
+      renderRecommendationMap(markets, location);
+      document.getElementById('results').classList.add('visible');
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderPriceTrendSection(markets) {
+      const tabs = document.getElementById('market-tabs');
+      tabs.innerHTML = '';
+      markets.forEach((m, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'market-tab' + (idx === selectedMarketIdx ? ' active' : '');
+        btn.textContent = `${RANK_MEDALS[m.rank] || '#' + m.rank} ${m.market_name.split(' ')[0]}`;
+        btn.onclick = () => {
+          selectedMarketIdx = idx;
+          document.querySelectorAll('.market-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+          renderPriceTrendForMarket(currentMarkets[idx]);
+        };
+        tabs.appendChild(btn);
+      });
+      renderPriceTrendForMarket(markets[selectedMarketIdx]);
+    }
+
+    function renderPriceTrendForMarket(m) {
+      if (!m || !m.price_history || m.price_history.length === 0) return;
+      document.getElementById('trend-market-title').textContent = `5-Day Price Trend — ${m.market_name} (${m.region})`;
+      const history = m.price_history;
+
+      const tbody = document.getElementById('trend-table-body');
+      tbody.innerHTML = '';
+      history.slice().reverse().forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 600;">${row.date.slice(5)}</td>
+          <td><span class="price-pill">₹${row.modal_price.toFixed(1)}/kg</span></td>
+          <td style="color: var(--muted);">₹${row.min_price} – ₹${row.max_price}</td>
+          <td>${row.arrival_quantity} qtl</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const prices = history.map(h => h.modal_price);
+      const avgPrice = (prices.reduce((a, b) => a + b, 0) / prices.length).toFixed(1);
+      const minP = Math.min(...prices);
+      const maxP = Math.max(...prices);
+      const delta = (prices[prices.length - 1] - prices[0]).toFixed(1);
+      const deltaSign = delta > 0 ? `+₹${delta} ↑` : (delta < 0 ? `₹${delta} ↓` : `₹0.0 →`);
+      const deltaColor = delta > 0 ? 'var(--green-400)' : (delta < 0 ? 'var(--red)' : 'var(--amber)');
+
+      document.getElementById('trend-stats-row').innerHTML = `
+        <div class="stat-badge"><div class="stat-badge-label">5-Day Avg Modal</div><div class="stat-badge-val">₹${avgPrice}/kg</div></div>
+        <div class="stat-badge"><div class="stat-badge-label">5-Day Momentum</div><div class="stat-badge-val" style="color: ${deltaColor}">${deltaSign}</div></div>
+        <div class="stat-badge"><div class="stat-badge-label">Historical Min</div><div class="stat-badge-val">₹${minP}/kg</div></div>
+        <div class="stat-badge"><div class="stat-badge-label">Historical Max</div><div class="stat-badge-val">₹${maxP}/kg</div></div>
+      `;
+
+      renderSVGChart(history);
+    }
+
+    function renderSVGChart(history) {
+      const W = 420, H = 200, padL = 40, padR = 15, padT = 20, padB = 25;
+      const innerW = W - padL - padR;
+      const innerH = H - padT - padB;
+      const prices = history.map(h => h.modal_price);
+      let minVal = Math.min(...prices) - 1, maxVal = Math.max(...prices) + 1;
+      if (minVal === maxVal) { minVal -= 2; maxVal += 2; }
+
+      const getX = (idx) => padL + (idx / (history.length - 1)) * innerW;
+      const getY = (val) => padT + innerH - ((val - minVal) / (maxVal - minVal)) * innerH;
+
+      const gridG = document.getElementById('chart-grid');
+      const labelsG = document.getElementById('chart-labels');
+      gridG.innerHTML = '';
+      labelsG.innerHTML = '';
+
+      const steps = 3;
+      for (let i = 0; i <= steps; i++) {
+        const v = minVal + (i / steps) * (maxVal - minVal);
+        const y = getY(v);
+        gridG.innerHTML += `<line class="chart-grid-line" x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}"/>`;
+        labelsG.innerHTML += `<text class="chart-label" x="${padL - 6}" y="${y + 4}" text-anchor="end">₹${Math.round(v)}</text>`;
+      }
+
+      const pts = history.map((h, i) => ({ x: getX(i), y: getY(h.modal_price), ...h }));
+      const pathD = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+      const areaD = `${pathD} L ${pts[pts.length - 1].x} ${padT + innerH} L ${pts[0].x} ${padT + innerH} Z`;
+
+      document.getElementById('chart-line-path').setAttribute('d', pathD);
+      document.getElementById('chart-area-path').setAttribute('d', areaD);
+
+      const pointsG = document.getElementById('chart-points');
+      pointsG.innerHTML = '';
+      pts.forEach((p) => {
+        labelsG.innerHTML += `<text class="chart-label" x="${p.x}" y="${H - 8}" text-anchor="middle">${p.date.slice(5)}</text>`;
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dot.setAttribute('class', 'chart-dot');
+        dot.setAttribute('cx', p.x);
+        dot.setAttribute('cy', p.y);
+        dot.setAttribute('r', '4.5');
+        dot.innerHTML = `<title>${p.date}: ₹${p.modal_price}/kg</title>`;
+        pointsG.appendChild(dot);
+      });
+    }
+
+    function openMarketModal(idx) {
+      const m = currentMarkets[idx];
+      if (!m) return;
+      document.getElementById('modal-market-name').textContent = `#${m.rank} ${m.market_name}`;
+      document.getElementById('modal-market-region').textContent = `Region: ${m.region} · Distance: ${m.distance_km} km`;
+      document.getElementById('modal-grid').innerHTML = `
+        <div class="modal-item"><div style="font-size: .7rem; color: var(--muted); font-weight:700;">PREDICTED PRICE</div><div style="font-size: 1.1rem; font-weight:800;">₹${m.predicted_price}/kg</div></div>
+        <div class="modal-item"><div style="font-size: .7rem; color: var(--muted); font-weight:700;">DEMAND LEVEL</div><div style="font-size: 1.1rem; font-weight:800; color: var(--green-300);">${m.demand_level}</div></div>
+        <div class="modal-item"><div style="font-size: .7rem; color: var(--muted); font-weight:700;">GROSS REVENUE</div><div style="font-size: 1.1rem; font-weight:800;">${fmt(m.expected_revenue)}</div></div>
+        <div class="modal-item"><div style="font-size: .7rem; color: var(--muted); font-weight:700;">TRANSPORT COST</div><div style="font-size: 1.1rem; font-weight:800; color: var(--red);">${fmt(m.transport_cost)}</div></div>
+        <div class="modal-item"><div style="font-size: .7rem; color: var(--muted); font-weight:700;">MANDI & OTHER FEES</div><div style="font-size: 1.1rem; font-weight:800; color: var(--red);">${fmt(m.other_costs)}</div></div>
+        <div class="modal-item" style="border-color: var(--green-500); background: rgba(34,197,94,0.1);"><div style="font-size: .7rem; color: var(--green-400); font-weight:700;">EXPECTED NET RETURN</div><div style="font-size: 1.15rem; font-weight:800; color: var(--green-400);">${fmt(m.expected_net_return)}</div></div>
+      `;
+      document.getElementById('modal-breakdown').innerHTML = `
+Revenue    = ${m.predicted_price} × ${currentParams.quantity} kg = ${fmt(m.expected_revenue)}
+Transport  = Base + (${m.distance_km}km × Rate) + (${currentParams.quantity}kg × Rate) = ${fmt(m.transport_cost)}
+Mandi Fees = ₹1.5/kg × ${currentParams.quantity} kg = ${fmt(m.other_costs)}
+--------------------------------------------------
+Net Return = ${fmt(m.expected_revenue)} − ${fmt(m.transport_cost)} − ${fmt(m.other_costs)} = ${fmt(m.expected_net_return)}
+      `;
+      document.getElementById('modal-backdrop').classList.add('active');
+    }
+
+    function closeModal(e) { if (e.target.id === 'modal-backdrop') closeModalDirect(); }
+    function closeModalDirect() { document.getElementById('modal-backdrop').classList.remove('active'); }
+
+    function applyPreset(crop, qty, loc, vehicle) {
+      document.getElementById('crop').value = crop;
+      document.getElementById('quantity').value = qty;
+      document.getElementById('location').value = loc;
+      document.getElementById('vehicle').value = vehicle;
+      submitProduceAndRecommend();
+    }
+
+    // ── VIEW 2: SUBMISSION HISTORY ──
+    async function loadSubmissionHistory() {
+      const container = document.getElementById('history-container');
+      if (!currentFarmer) {
+        currentFarmer = { id: 1, name: "Farmer", location: "Pune", farm_size_acres: 5.0 };
+      }
+      try {
+        const res = await fetch(API + `/produce/history?farmer_id=${currentFarmer.id}`);
+        const rows = await res.json();
+        if (!Array.isArray(rows) || rows.length === 0) {
+          container.innerHTML = `<div style="text-align: center; color: var(--muted); padding: 30px;">No produce submissions found for ${currentFarmer.name}. Submit produce in the first tab to build your record.</div>`;
+          return;
+        }
+
+        let html = '<div class="market-list">';
+        rows.forEach(r => {
+          html += `
+            <div class="market-card">
+              <div class="rank-badge rank-1">✓</div>
+              <div>
+                <div class="market-name">${r.quantity_kg} kg ${r.crop} · ${r.quality_grade || 'Grade A'}</div>
+                <div class="market-meta">
+                  <span class="meta-pill">📍 Farm: ${r.location}</span>
+                  <span class="meta-pill">Top APMC: ${r.best_market_name || 'Computed'}</span>
+                  <span class="meta-pill">Vehicle: ${r.vehicle_type}</span>
+                  <span class="meta-pill">Submitted: ${(r.submitted_at || '').slice(0, 16)}</span>
+                </div>
+                <div class="action-btn-row" style="margin-top: 8px;">
+                  <a href="${API}/produce/${r.id}/deal-sheet" target="_blank" class="action-pill-btn btn-deal-sheet" style="text-decoration: none;">
+                    📄 View & Print Deal Sheet (#${r.id})
+                  </a>
+                </div>
+              </div>
+              <div class="net-return-col">
+                <div class="net-label">Top Expected Return</div>
+                <div class="net-value net-positive">${fmt(r.expected_net_return)}</div>
+              </div>
+            </div>
+          `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+      } catch (err) {
+        container.innerHTML = `<div style="color: var(--red);">Error loading history: ${err.message}</div>`;
+      }
+    }
+
+    // ── VIEW 3: BUYER MARKETPLACE ──
+    async function loadBuyerRequirements() {
+      const crop = document.getElementById('buyer-filter-crop').value;
+      const loc = document.getElementById('buyer-filter-location').value;
+      const list = document.getElementById('buyer-requirements-list');
+
+      let url = API + '/buyers/requirements?';
+      if (crop) url += `crop=${encodeURIComponent(crop)}&`;
+      if (loc) url += `location=${encodeURIComponent(loc)}&`;
+
+      try {
+        const res = await fetch(url);
+        const reqs = await res.json();
+        if (!Array.isArray(reqs) || reqs.length === 0) {
+          list.innerHTML = `<div style="color: var(--muted); padding: 30px; grid-column: 1/-1; text-align: center;">No buyer requirements match the selected filters.</div>`;
+          return;
+        }
+
+        let html = '';
+        reqs.forEach(r => {
+          const pickupBadge = r.pickup_available
+            ? `<span class="meta-pill" style="color: var(--green-300);">🚛 Farm Pickup Available</span>`
+            : `<span class="meta-pill" style="color: var(--amber);">📦 Drop-off at Hub</span>`;
+
+          html += `
+            <div class="buyer-card">
+              <div>
+                <div class="buyer-header">
+                  <div class="buyer-name">${r.buyer_name}</div>
+                  <span class="badge-verified">✓ Verified</span>
+                </div>
+                <div style="font-size: .8rem; color: var(--muted); margin-top: 2px;">📍 Sourcing Hub: ${r.location}</div>
+
+                <div class="buyer-deal" style="margin-top: 14px;">
+                  <div class="buyer-deal-item">
+                    <label>TARGET CROP</label>
+                    <div class="val">${r.crop}</div>
+                  </div>
+                  <div class="buyer-deal-item">
+                    <label>QUANTITY WANTED</label>
+                    <div class="val">${r.quantity_kg.toLocaleString()} kg</div>
+                  </div>
+                  <div class="buyer-deal-item">
+                    <label>OFFERED RATE</label>
+                    <div class="val" style="color: var(--green-400);">₹${r.offered_price}/kg</div>
+                  </div>
+                  <div class="buyer-deal-item">
+                    <label>LOGISTICS</label>
+                    <div style="font-size: .85rem; font-weight: 700; color: #fff;">${r.pickup_available ? 'Pickup' : 'Drop-off'}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 8px; align-items: center; justify-content: space-between;">
+                ${pickupBadge}
+                <button class="btn btn-secondary" style="padding: 6px 14px; font-size: .82rem;" onclick="showToast('Direct contact initiated: ${r.contact || '+91 98220 11223'}', '📞')">
+                  Contact Buyer →
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        list.innerHTML = html;
+      } catch (err) {
+        list.innerHTML = `<div style="color: var(--red);">Error loading buyer marketplace: ${err.message}</div>`;
+      }
+    }
+
+    // ── SMART LOGISTICS & MATCHING (ARCHITECTURE.md §7) ──
+    async function loadLogisticsDirectory() {
+      const hub = document.getElementById('logistics-filter-hub').value;
+      const vtype = document.getElementById('logistics-filter-vehicle').value;
+      const container = document.getElementById('logistics-providers-list');
+
+      let url = API + '/logistics/providers?';
+      if (hub) url += `hub=${encodeURIComponent(hub)}&`;
+      if (vtype) url += `vehicle_type=${encodeURIComponent(vtype)}&`;
+
+      try {
+        const res = await fetch(url);
+        const providers = await res.json();
+        if (!Array.isArray(providers) || providers.length === 0) {
+          container.innerHTML = `<div style="color: var(--muted); padding: 30px; grid-column: 1/-1; text-align: center;">No transport carriers found matching the filters.</div>`;
+          return;
+        }
+
+        let html = '';
+        providers.forEach(p => {
+          html += `
+            <div class="carrier-card">
+              <div>
+                <div class="carrier-header">
+                  <div>
+                    <div class="carrier-name">${p.name}</div>
+                    <div style="font-size: .8rem; color: var(--muted); margin-top: 2px;">📍 Base Hub: ${p.base_hub} · Operator: ${p.operator_name}</div>
+                  </div>
+                  <span class="badge-verified">✓ Verified Fleet</span>
+                </div>
+
+                <div class="carrier-specs" style="margin-top: 14px;">
+                  <div class="carrier-spec-item">
+                    <label>Assigned Vehicle</label>
+                    <div class="val">${p.vehicle_model}</div>
+                  </div>
+                  <div class="carrier-spec-item">
+                    <label>Payload Limit</label>
+                    <div class="val">${(p.max_payload_kg / 1000).toFixed(1)} Ton (${p.max_payload_kg.toLocaleString()} kg)</div>
+                  </div>
+                  <div class="carrier-spec-item">
+                    <label>TRD §4.1 Rates</label>
+                    <div class="val" style="color: var(--green-400);">₹${p.base_fee} base + ₹${p.rate_per_km}/km</div>
+                  </div>
+                  <div class="carrier-spec-item">
+                    <label>Carrier Rating</label>
+                    <div class="val" style="color: var(--amber);">⭐ ${p.rating} / 5 (${p.trips_completed} trips)</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 8px; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 10px;">
+                <span style="font-size: .8rem; color: var(--green-300);">Payload Rate: ₹${p.rate_per_kg}/kg</span>
+                <a href="tel:${p.contact}" class="btn" style="padding: 6px 14px; font-size: .78rem; text-decoration: none;">
+                  📞 Call ${p.contact}
+                </a>
+              </div>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      } catch (err) {
+        container.innerHTML = `<div style="color: var(--red);">Error loading logistics: ${err.message}</div>`;
+      }
+    }
+
+    async function openLogisticsModal(idx) {
+      const m = currentMarkets[idx];
+      const crop = currentParams.crop || document.getElementById('crop').value || 'Tomato';
+      const qty = parseFloat(currentParams.quantity || document.getElementById('quantity').value || 500);
+      const loc = currentParams.location || document.getElementById('location').value || 'Pune';
+      const vehicle = currentParams.vehicle || document.getElementById('vehicle').value || null;
+
+      document.getElementById('logistics-modal-subtitle').textContent =
+        `${loc} Farm → ${m.market_name} (${m.distance_km} km · ${qty} kg ${crop})`;
+
+      const listContainer = document.getElementById('logistics-modal-list');
+      listContainer.innerHTML = '<div style="color: var(--muted); padding: 20px; text-align: center;">Calculating live transporter matching & guaranteed freight quotes...</div>';
+      document.getElementById('logistics-modal-backdrop').classList.add('active');
+
+      try {
+        const res = await fetch(API + '/logistics/match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            farmer_location: loc,
+            destination_market: m.market_name,
+            distance_km: m.distance_km,
+            quantity_kg: qty,
+            vehicle_type: vehicle
+          })
+        });
+        const quotes = await res.json();
+        if (quotes.length === 0) {
+          listContainer.innerHTML = `<div style="color: var(--muted); padding: 20px; text-align: center;">No verified transporters meet the payload requirement (${qty} kg).</div>`;
+          return;
+        }
+
+        let html = '';
+        quotes.forEach(q => {
+          html += `
+            <div style="background: var(--surface-2); border: 1.5px solid var(--border-bright); border-radius: var(--radius); padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap;">
+              <div>
+                <div style="font-weight: 800; color: #fff; font-size: 1rem;">${q.provider_name}</div>
+                <div style="font-size: .8rem; color: var(--muted); margin-top: 2px;">
+                  ${q.vehicle_model} · Operator: <strong>${q.operator_name}</strong> (${q.contact})
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap;">
+                  <span class="meta-pill" style="color: var(--amber);">⭐ ${q.rating}</span>
+                  <span class="meta-pill">⏱️ ~${q.estimated_transit_hours} hrs transit</span>
+                  <span class="meta-pill">✓ Verified Carrier</span>
+                </div>
+              </div>
+
+              <div style="text-align: right; flex-shrink: 0;">
+                <div style="font-size: .72rem; color: var(--muted); text-transform: uppercase;">Guaranteed Freight</div>
+                <div style="font-size: 1.25rem; font-weight: 800; color: var(--green-400);">${fmt(q.freight_cost)}</div>
+                <button class="action-pill-btn btn-deal-sheet" style="margin-top: 6px;" onclick="downloadDealSheet(${idx}, ${q.provider_id})">
+                  📄 Print Deal Sheet with Carrier
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        listContainer.innerHTML = html;
+      } catch (err) {
+        listContainer.innerHTML = `<div style="color: var(--red); padding: 15px;">Error matching logistics: ${err.message}</div>`;
+      }
+    }
+
+    function closeLogisticsModal(e) {
+      if (e.target.id === 'logistics-modal-backdrop') closeLogisticsModalDirect();
+    }
+    function closeLogisticsModalDirect() {
+      document.getElementById('logistics-modal-backdrop').classList.remove('active');
+    }
+
+    // ── DOWNLOAD CERTIFIED DEAL SHEET (PDF / PRINT) ──
+    async function downloadDealSheet(marketIdx, carrierId = null) {
+      const m = currentMarkets[marketIdx];
+      const crop = currentParams.crop || document.getElementById('crop').value || 'Tomato';
+      const qty = parseFloat(currentParams.quantity || document.getElementById('quantity').value || 500);
+      const loc = currentParams.location || document.getElementById('location').value || 'Pune';
+
+      const payload = {
+        crop: crop,
+        quantity_kg: qty,
+        farmer_name: (currentFarmer && currentFarmer.name) ? currentFarmer.name : "Registered Farmer",
+        farmer_location: loc,
+        market_name: m.market_name,
+        predicted_price: m.predicted_price,
+        distance_km: m.distance_km,
+        transport_cost: m.transport_cost,
+        other_costs: m.other_costs,
+        expected_revenue: m.expected_revenue,
+        expected_net_return: m.expected_net_return,
+        confidence: m.confidence || 0.95,
+        trend: m.trend || "stable",
+        demand_level: m.demand_level || "High",
+        carrier_id: carrierId
+      };
+
+      showToast('Generating official certified deal sheet...', '📄');
+      try {
+        const res = await fetch(API + '/produce/deal-sheet/preview', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const html = await res.text();
+        const dealSheetWindow = window.open('', '_blank');
+        if (dealSheetWindow) {
+          dealSheetWindow.document.open();
+          dealSheetWindow.document.write(html);
+          dealSheetWindow.document.close();
+        } else {
+          showToast('Popup blocked. Please allow popups to view Deal Sheet.', '⚠️');
+        }
+      } catch (err) {
+        showToast('Error generating deal sheet: ' + err.message, '⚠️');
+      }
+    }
+
+    // ── VIEW 4: REPORT MANDI PRICE ──
+    async function submitPriceReport(e) {
+      e.preventDefault();
+      if (!currentFarmer) {
+        currentFarmer = { id: 1, name: "Farmer", location: "Pune", farm_size_acres: 5.0 };
+      }
+      const crop = document.getElementById('rep-crop').value;
+      const market_id = parseInt(document.getElementById('rep-market').value);
+      const reported_price = parseFloat(document.getElementById('rep-price').value);
+      const date = document.getElementById('rep-date').value;
+
+      try {
+        const res = await fetch(API + '/farmer-reports', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            farmer_id: currentFarmer.id,
+            crop,
+            market_id,
+            reported_price,
+            date
+          })
+        });
+        const data = await res.json();
+        const box = document.getElementById('report-feedback-box');
+        box.style.display = 'block';
+
+        const color = data.validated ? 'var(--green-400)' : 'var(--red)';
+        box.innerHTML = `
+          <div style="background: var(--surface-2); border: 1.5px solid ${color}; padding: 16px; border-radius: 8px;">
+            <div style="font-weight: 800; color: ${color}; font-size: 1.05rem;">
+              ${data.validated ? '✓ Price Corroborated' : '⚠️ Anomaly Flagged'} (Confidence: ${(data.confidence_score * 100).toFixed(0)}%)
+            </div>
+            <div style="font-size: .88rem; color: var(--text-dim); margin-top: 4px;">
+              ${data.message}
+            </div>
+            <div style="font-size: .8rem; color: var(--muted); margin-top: 8px;">
+              Reported: ₹${data.reported_price}/kg · APMC Modal Benchmark: ₹${data.official_modal_price || '—'}/kg
+            </div>
+          </div>
+        `;
+        showToast('Mandi report submitted for validation!');
+        loadRecentReports();
+      } catch (err) {
+        showToast('Error: ' + err.message, '⚠️');
+      }
+    }
+
+    async function loadRecentReports() {
+      const container = document.getElementById('recent-reports-table');
+      try {
+        const res = await fetch(API + '/farmer-reports?limit=5');
+        const rows = await res.json();
+        if (rows.length === 0) {
+          container.innerHTML = '<div style="color: var(--muted);">No reports logged yet.</div>';
+          return;
+        }
+
+        let html = '<table class="trend-table"><thead><tr><th>Farmer</th><th>Market</th><th>Crop</th><th>Price</th><th>Confidence</th><th>Date</th></tr></thead><tbody>';
+        rows.forEach(r => {
+          const confColor = r.confidence_score >= 0.8 ? 'var(--green-400)' : (r.confidence_score >= 0.6 ? 'var(--amber)' : 'var(--red)');
+          html += `
+            <tr>
+              <td>${r.farmer_name || 'Farmer #' + r.farmer_id}</td>
+              <td>${r.market_name}</td>
+              <td>${r.crop}</td>
+              <td><span class="price-pill">₹${r.reported_price}/kg</span></td>
+              <td style="color: ${confColor}; font-weight: 700;">${(r.confidence_score * 100).toFixed(0)}%</td>
+              <td style="color: var(--muted);">${r.date}</td>
+            </tr>
+          `;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (err) {
+        container.innerHTML = `<div style="color: var(--red);">${err.message}</div>`;
+      }
+    }
+
+    // ── VIEW 5: MARKETS DIRECTORY & MAP ──
+    async function loadMarketsDirectory() {
+      const grid = document.getElementById('markets-directory-grid');
+      try {
+        const res = await fetch(API + '/markets');
+        const markets = await res.json();
+        if (!Array.isArray(markets)) {
+          grid.innerHTML = `<div style="color: var(--muted); padding: 20px;">Unable to load markets data.</div>`;
+          return;
+        }
+        renderMarketsDirectoryMap(markets);
+
+        let html = '';
+        markets.forEach(m => {
+          let priceChips = '';
+          (m.crop_prices || []).forEach(p => {
+            priceChips += `<span class="meta-pill" style="font-size: .75rem;">${p.crop}: ₹${p.modal_price}/kg</span>`;
+          });
+
+          html += `
+            <div class="card" style="margin-bottom: 0;">
+              <div class="market-name">📍 ${m.name}</div>
+              <div style="font-size: .8rem; color: var(--muted); margin-bottom: 12px;">Region: ${m.region} · Coordinates: ${m.lat.toFixed(2)}, ${m.lng.toFixed(2)}</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">${priceChips}</div>
+            </div>
+          `;
+        });
+        grid.innerHTML = html;
+      } catch (err) {
+        grid.innerHTML = `<div style="color: var(--red);">${err.message}</div>`;
+      }
+    }
+
+    // ── Interactive Map Rendering Functions ──
+    function renderRecommendationMap(markets, farmerLoc) {
+      const mapContainer = document.getElementById('recommendation-map');
+      if (!mapContainer || typeof L === 'undefined') return;
+
+      const coords = FARMER_LOCATIONS[farmerLoc] || [18.5204, 73.8567];
+      const [farmerLat, farmerLng] = coords;
+
+      if (!recomMap) {
+        recomMap = L.map('recommendation-map', { scrollWheelZoom: false }).setView([farmerLat, farmerLng], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '&copy; OpenStreetMap'
+        }).addTo(recomMap);
+        recomMapLayerGroup = L.layerGroup().addTo(recomMap);
+      } else {
+        recomMapLayerGroup.clearLayers();
+      }
+
+      // Farmer Home Marker
+      const farmerIcon = L.divIcon({
+        className: 'custom-farmer-icon',
+        html: `<div style="background:#16a34a;color:#fff;border:2px solid #86efac;border-radius:50%;width:34px;height:34px;display:grid;place-items:center;font-size:16px;box-shadow:0 0 14px rgba(34,197,94,0.7);">🏡</div>`,
+        iconSize: [34, 34],
+        iconAnchor: [17, 17]
+      });
+
+      L.marker([farmerLat, farmerLng], { icon: farmerIcon })
+        .bindPopup(`<strong>🏡 Your Farm Location</strong><br>Origin: ${farmerLoc}`)
+        .addTo(recomMapLayerGroup);
+
+      const bounds = [[farmerLat, farmerLng]];
+      const rankColors = { 1: '#fbbf24', 2: '#e2e8f0', 3: '#fb923c' };
+
+      markets.forEach(m => {
+        if (!m.lat || !m.lng) return;
+        bounds.push([m.lat, m.lng]);
+
+        const isRank1 = m.rank === 1;
+        const color = rankColors[m.rank] || '#4ade80';
+
+        const marketIcon = L.divIcon({
+          className: 'custom-market-pin',
+          html: `<div style="background:#0e2216;color:${color};border:2px solid ${color};border-radius:18px;padding:3px 9px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.8);cursor:pointer;">
+            ${RANK_MEDALS[m.rank] || '#' + m.rank} ${m.market_name.split(' ')[0]}
+          </div>`,
+          iconSize: [80, 24],
+          iconAnchor: [40, 12]
+        });
+
+        const popupHtml = `
+          <div style="font-size: .88rem; line-height: 1.4;">
+            <div style="font-weight: 800; color: #fff; margin-bottom: 4px;">${m.market_name} (${m.region})</div>
+            <div>Rank: <strong style="color: ${color};">${RANK_MEDALS[m.rank] || '#' + m.rank} #${m.rank}</strong></div>
+            <div>Predicted Price: <strong>₹${m.predicted_price}/kg</strong> (${m.trend})</div>
+            <div>Distance: <strong>${m.distance_km} km</strong> · Transport: <strong>${fmt(m.transport_cost)}</strong></div>
+            <div style="margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--border-bright);">
+              Expected Net Return: <strong style="color: ${m.expected_net_return >= 0 ? 'var(--green-400)' : 'var(--red)'}; font-size: 1rem;">${fmt(m.expected_net_return)}</strong>
+            </div>
+          </div>
+        `;
+
+        L.marker([m.lat, m.lng], { icon: marketIcon })
+          .bindPopup(popupHtml)
+          .addTo(recomMapLayerGroup);
+
+        // Transit route from farmer to market
+        L.polyline([[farmerLat, farmerLng], [m.lat, m.lng]], {
+          color: isRank1 ? '#22c55e' : '#64748b',
+          weight: isRank1 ? 4 : 2,
+          opacity: isRank1 ? 0.95 : 0.45,
+          dashArray: isRank1 ? null : '6, 6'
+        }).addTo(recomMapLayerGroup);
+      });
+
+      if (bounds.length > 1) {
+        recomMap.fitBounds(bounds, { padding: [40, 40] });
+      }
+      setTimeout(() => { if (recomMap) recomMap.invalidateSize(); }, 300);
+    }
+
+    function renderMarketsDirectoryMap(markets) {
+      const mapContainer = document.getElementById('markets-map');
+      if (!mapContainer || typeof L === 'undefined') return;
+
+      if (!marketsDirMap) {
+        marketsDirMap = L.map('markets-map', { scrollWheelZoom: false }).setView([19.2, 75.8], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '&copy; OpenStreetMap'
+        }).addTo(marketsDirMap);
+        marketsDirLayerGroup = L.layerGroup().addTo(marketsDirMap);
+      } else {
+        marketsDirLayerGroup.clearLayers();
+      }
+
+      const bounds = [];
+      markets.forEach(m => {
+        if (!m.lat || !m.lng) return;
+        bounds.push([m.lat, m.lng]);
+
+        let priceSummary = (m.crop_prices || []).map(p => `${p.crop}: ₹${p.modal_price}`).join(' · ');
+
+        const icon = L.divIcon({
+          className: 'custom-market-pin',
+          html: `<div style="background:#0e2216;color:#86efac;border:2px solid #22c55e;border-radius:18px;padding:3px 9px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.8);cursor:pointer;">
+            📍 ${m.name.split(' ')[0]}
+          </div>`,
+          iconSize: [80, 24],
+          iconAnchor: [40, 12]
+        });
+
+        const popupHtml = `
+          <div style="font-size: .88rem; line-height: 1.4;">
+            <div style="font-weight: 800; color: #fff; margin-bottom: 4px;">${m.name}</div>
+            <div>Region: <strong>${m.region}</strong></div>
+            <div style="margin-top: 4px; font-size: .78rem; color: var(--text-dim);">${priceSummary || 'Live rates available'}</div>
+          </div>
+        `;
+
+        L.marker([m.lat, m.lng], { icon })
+          .bindPopup(popupHtml)
+          .addTo(marketsDirLayerGroup);
+      });
+
+      if (bounds.length > 0) {
+        marketsDirMap.fitBounds(bounds, { padding: [30, 30] });
+      }
+      setTimeout(() => { if (marketsDirMap) marketsDirMap.invalidateSize(); }, 300);
+    }
+
+    // ── VIEW 6: ADMIN REGIONAL DASHBOARD ──
+    async function loadAdminDashboard() {
+      try {
+        // Fetch overview
+        const resOver = await fetch(API + '/admin/overview');
+        const over = await resOver.json();
+
+        if (over) {
+          const sm = document.getElementById('stat-markets'); if (sm) sm.textContent = over.total_markets || 0;
+          const sb = document.getElementById('stat-buyers'); if (sb) sb.textContent = over.total_active_buyers || 0;
+          const sd = document.getElementById('stat-demand'); if (sd) sd.textContent = (over.total_buyer_demand_kg || 0).toLocaleString() + ' kg';
+          const ss = document.getElementById('stat-submissions'); if (ss) ss.textContent = over.total_produce_submissions || 0;
+        }
+
+        // Fetch regional
+        const resReg = await fetch(API + '/admin/regional');
+        const reg = await resReg.json();
+
+        const tbody = document.getElementById('regional-table-body');
+        if (tbody) {
+          tbody.innerHTML = '';
+          ((reg && reg.regional_intelligence) || []).forEach(r => {
+            let badgeClass = 'status-balanced';
+            if (r.status && r.status.includes('SHORTAGE')) badgeClass = 'status-shortage';
+            if (r.status && r.status.includes('SURPLUS')) badgeClass = 'status-surplus';
+
+            tbody.innerHTML += `
+              <tr>
+                <td style="font-weight: 700; color: #fff;">${r.region}</td>
+                <td>${(r.total_arrivals_qtl || 0).toLocaleString()} qtl</td>
+                <td>${(r.total_buyer_demand_kg || 0).toLocaleString()} kg</td>
+                <td><span class="regional-status-badge ${badgeClass}">${r.status}</span></td>
+              </tr>
+            `;
+          });
+        }
+
+        // Anomalies
+        const aList = document.getElementById('anomaly-radar-list');
+        if (over.flagged_anomalies && over.flagged_anomalies.length > 0) {
+          let aHtml = '<div style="display: flex; flex-direction: column; gap: 8px;">';
+          over.flagged_anomalies.forEach(a => {
+            aHtml += `
+              <div style="background: rgba(248, 113, 113, .1); border: 1.5px solid var(--red); padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong style="color: #fff;">${a.crop}</strong> at <strong>${a.market_name}</strong>
+                  <div style="font-size: .78rem; color: #fca5a5;">Reported: ₹${a.reported_price}/kg on ${a.date}</div>
+                </div>
+                <span class="regional-status-badge status-shortage">Confidence ${(a.confidence_score * 100).toFixed(0)}%</span>
+              </div>
+            `;
+          });
+          aHtml += '</div>';
+          aList.innerHTML = aHtml;
+        } else {
+          aList.innerHTML = '<div style="color: var(--green-300);">✓ No price anomalies currently detected. Markets operating within normal variance bands.</div>';
+        }
+
+      } catch (err) {
+        showToast('Error loading admin dashboard: ' + err.message, '⚠️');
+      }
+    }
+
+    // ── Phase 5: Smart Alerts & Data Ingestion ──
+    async function openAlertsModal() {
+      document.getElementById('alerts-modal-backdrop').classList.add('active');
+      const container = document.getElementById('alerts-list-container');
+      container.innerHTML = '<div style="color: var(--muted); padding: 20px; text-align: center;">Scanning market feeds...</div>';
+
+      try {
+        const crop = document.getElementById('crop') ? document.getElementById('crop').value : '';
+        const res = await fetch(API + `/alerts?location=${encodeURIComponent(currentFarmer.location)}&crop=${encodeURIComponent(crop)}`);
+        const alerts = await res.json();
+
+        if (alerts.length === 0) {
+          container.innerHTML = '<div style="color: var(--green-300); padding: 20px; text-align: center;">✓ No urgent warnings. Markets operating normally.</div>';
+          return;
+        }
+
+        let html = '';
+        alerts.forEach(a => {
+          let borderColor = 'var(--border-bright)';
+          let icon = 'ℹ️';
+          if (a.severity === 'success') { borderColor = 'var(--green-500)'; icon = '🚀'; }
+          if (a.severity === 'warning') { borderColor = 'var(--amber)'; icon = '⚠️'; }
+          if (a.severity === 'info') { borderColor = 'var(--blue)'; icon = '📈'; }
+
+          html += `
+            <div style="background: var(--surface-2); border: 1.5px solid ${borderColor}; border-radius: 8px; padding: 14px 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div style="font-weight: 800; color: #fff; font-size: .95rem;">${icon} ${a.title}</div>
+                <span class="meta-pill" style="font-size: .7rem;">${a.crop}</span>
+              </div>
+              <div style="font-size: .84rem; color: var(--text-dim); margin-top: 6px; line-height: 1.4;">
+                ${a.message}
+              </div>
+              <div style="font-size: .72rem; color: var(--muted); margin-top: 8px;">${a.timestamp}</div>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+        document.getElementById('alerts-count-badge').textContent = alerts.length;
+      } catch (err) {
+        container.innerHTML = `<div style="color: var(--red);">Error loading alerts: ${err.message}</div>`;
+      }
+    }
+
+    function closeAlertsModal(e) { if (e.target.id === 'alerts-modal-backdrop') closeAlertsModalDirect(); }
+    function closeAlertsModalDirect() { document.getElementById('alerts-modal-backdrop').classList.remove('active'); }
+
+    async function checkDataGovStatus() {
+      const badge = document.getElementById('data-gov-status-badge');
+      if (!badge) return;
+      try {
+        const res = await fetch(API + '/admin/data-gov-status');
+        const s = await res.json();
+        if (s.api_key_configured) {
+          badge.innerHTML = `🟢 Live API Connected (${s.api_key_masked})`;
+          badge.style.color = 'var(--green-300)';
+          badge.style.borderColor = 'var(--green-500)';
+        } else {
+          badge.innerHTML = `🟡 Ready (Official Agmarknet Benchmark Model)`;
+          badge.style.color = 'var(--amber)';
+          badge.style.borderColor = 'var(--amber)';
+        }
+      } catch (e) {
+        badge.innerHTML = `📡 Government Feeds Active`;
+      }
+    }
+
+    async function triggerAgmarknetSync() {
+      const keyInput = document.getElementById('custom-agmarknet-key');
+      const apiKey = keyInput ? keyInput.value.trim() : '';
+      showToast('Ingesting official APMC daily feeds...', '🔄');
+
+      let url = API + '/admin/sync-prices';
+      if (apiKey) url += `?api_key=${encodeURIComponent(apiKey)}`;
+
+      try {
+        const res = await fetch(url, { method: 'POST' });
+        const data = await res.json();
+        const modeLabel = data.mode === 'live_data_gov_in'
+          ? `Live data.gov.in (${data.live_records_fetched} records)`
+          : `Official APMC Benchmark Model`;
+
+        showToast(`Agmarknet Sync: ${data.records_synced} prices updated via ${modeLabel}!`, '✓');
+
+        const fb = document.getElementById('agmarknet-sync-feedback');
+        if (fb) {
+          fb.style.display = 'block';
+          fb.innerHTML = `
+            <div style="background: var(--surface-2); border: 1px solid var(--border-bright); padding: 12px 16px; border-radius: 8px; font-size: .85rem;">
+              <span style="color: var(--green-400); font-weight: 700;">✓ Synced ${data.records_synced} prices</span>
+              for ${data.markets_updated} APMC markets across 5 commodities (${data.crops_covered.join(', ')}).
+              Mode: <strong>${data.mode}</strong> (Confidence: ${(data.confidence_score * 100).toFixed(0)}%).
+            </div>
+          `;
+        }
+
+        checkDataGovStatus();
+        loadAdminDashboard();
+      } catch (err) {
+        showToast('Sync error: ' + err.message, '⚠️');
+      }
+    }
+
+    // Preload alerts count on page startup
+    setTimeout(async () => {
+      try {
+        const res = await fetch(API + '/alerts');
+        const alerts = await res.json();
+        if (document.getElementById('alerts-count-badge')) {
+          document.getElementById('alerts-count-badge').textContent = alerts.length;
+        }
+      } catch (e) { }
+    }, 800);
+  </script>
+</body>
+
+</html>
